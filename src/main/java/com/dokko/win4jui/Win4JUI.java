@@ -1,6 +1,7 @@
 package com.dokko.win4jui;
 
-import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatLaf;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,29 +13,37 @@ import java.awt.*;
 public class Win4JUI {
 
     private static int screenWidth, screenHeight;
-    //When assigned, when opening a window it will automatically resize to the percentage of the screen
-    private static int developerScreenWidth, developerScreenHeight;
+    private static int developerScreenWidth = 0, developerScreenHeight = 0;
+    private static boolean darkTheme;
     @SuppressWarnings("unused")
-    public static Dimension getDeveloperScreenSize() {
-        return new Dimension(developerScreenWidth, developerScreenHeight);
+    public static boolean isDarkTheme() {
+        return darkTheme;
     }
-    @SuppressWarnings("unused")
-    public static void setDeveloperScreenSize(int width, int height){
-        developerScreenWidth = width;
-        developerScreenHeight = height;
-    }
-    private static LookAndFeel design = new FlatIntelliJLaf();
+    private static LookAndFeel design = new FlatDarculaLaf();
     @SuppressWarnings("unused")
     public static LookAndFeel getDesign() {
         return design;
     }
     @SuppressWarnings("unused")
-    public static void setDesign(LookAndFeel design) {
+    public static void setDesign(LookAndFeel design) throws Exception {
         Win4JUI.design = design;
+        UIManager.setLookAndFeel(Win4JUI.getDesign());
+        darkTheme = FlatLaf.isLafDark();
+    }
+    @SuppressWarnings("unused")
+    public static Dimension getDeveloperScreenSize() {
+        if(developerScreenWidth == 0 || developerScreenHeight == 0)return null;
+        return new Dimension(developerScreenWidth, developerScreenHeight);
+    }
+    /**After called, when opening a window it will automatically resize to the percentage of the screen*/
+    @SuppressWarnings("unused")
+    public static void setDeveloperScreenSize(int width, int height){
+        developerScreenWidth = width;
+        developerScreenHeight = height;
     }
     @SuppressWarnings("unused")
     public static void initialize() throws Exception {
-        UIManager.setLookAndFeel(design);
+        setDesign(design);
         Win4JUI.screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
         Win4JUI.screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
     }
