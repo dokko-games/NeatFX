@@ -2,6 +2,7 @@ package com.dokko.win4jui;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatLaf;
+import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.awt.*;
  * @since v0.0
  */
 public class Win4JUI {
-
+    @Getter
     private static int screenWidth, screenHeight;
     private static int developerScreenWidth = 0, developerScreenHeight = 0;
     private static boolean darkTheme;
@@ -45,15 +46,11 @@ public class Win4JUI {
     public static void initialize() throws Exception {
         setDesign(design);
         Win4JUI.screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-        Win4JUI.screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-    }
-    @SuppressWarnings("unused")
-    public static int getScreenWidth() {
-        return Win4JUI.screenWidth;
-    }
-    @SuppressWarnings("unused")
-    public static int getScreenHeight() {
-        return Win4JUI.screenHeight;
+        Win4JUI.screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height; //TODO: replace with logger
+        if(getDeveloperScreenSize() != null){
+            System.out.println("Target Screen: "+Win4JUI.getDeveloperScreenSize().width+"x"+Win4JUI.getDeveloperScreenSize().height);
+        }
+        System.out.println("User Screen: "+Win4JUI.getScreenDimensions());
     }
     @SuppressWarnings("unused")
     public static String getScreenDimensions() {
