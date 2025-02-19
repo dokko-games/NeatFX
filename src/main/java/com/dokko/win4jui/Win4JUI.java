@@ -3,6 +3,7 @@ package com.dokko.win4jui;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatLaf;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +17,9 @@ public class Win4JUI {
     private static int screenWidth, screenHeight;
     private static int developerScreenWidth = 0, developerScreenHeight = 0;
     private static boolean darkTheme;
+    @Getter
+    @Setter
+    private static String defaultFont = "Press Start 2P";
     @SuppressWarnings("unused")
     public static boolean isDarkTheme() {
         return darkTheme;
@@ -56,4 +60,5 @@ public class Win4JUI {
     public static String getScreenDimensions() {
         return Win4JUI.getScreenWidth()+"x"+Win4JUI.getScreenHeight();
     }
+
 }

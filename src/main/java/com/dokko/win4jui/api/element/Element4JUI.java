@@ -35,4 +35,13 @@ public abstract class Element4JUI {
     }
 
     protected abstract void doRender(Graphics2D graphics, float x, float y, float width, float height, float scalingX, float scalingY);
+
+    public Element4JUI addF(Element4JUI element) {
+        foregroundChildren.add(element);
+        return this;
+    }
+    public Element4JUI addB(Element4JUI element) {
+        backgroundChildren.add(element);
+        return this;
+    }
 }

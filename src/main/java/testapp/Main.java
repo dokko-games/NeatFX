@@ -2,6 +2,7 @@ package testapp;
 
 import com.dokko.win4jui.Win4JUI;
 import com.dokko.win4jui.api.element.impl.Panel4JUI;
+import com.dokko.win4jui.api.element.impl.Text4JUI;
 import com.dokko.win4jui.api.window.Window4JUI;
 
 import java.awt.*;
@@ -11,9 +12,12 @@ public class Main {
         try {
             Win4JUI.setDeveloperScreenSize(1920, 1080);
             Win4JUI.initialize();
+            Win4JUI.setDefaultFont("Minecraftia");
             Window4JUI window4JUI = new Window4JUI("Test Application", 1100, 800);
+            window4JUI.getElements().add(new Panel4JUI(35, 15, 110, 400).setBackground(Color.gray));
+            window4JUI.getElements().add(new Text4JUI("This text scales automatically", 30, 35).setForeground(Color.white).setBackground(Color.black));
+            window4JUI.getElements().add(new Text4JUI("This text doesn't", 30, 165).setScaleText(false).setForeground(Color.white).setBackground(Color.black));
             window4JUI.setVisible(true);
-            window4JUI.getElements().add(new Panel4JUI(35, 15, 110, 400).setBackground(Color.red));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

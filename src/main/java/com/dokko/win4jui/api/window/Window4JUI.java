@@ -2,6 +2,7 @@ package com.dokko.win4jui.api.window;
 
 import com.dokko.win4jui.Win4JUI;
 import com.dokko.win4jui.api.element.Element4JUI;
+import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,11 +13,8 @@ import java.util.ArrayList;
  */
 public class Window4JUI extends JFrame {
     private int targetWidth, targetHeight;
+    @Getter
     private final ArrayList<Element4JUI> elements;
-
-    public ArrayList<Element4JUI> getElements() {
-        return elements;
-    }
 
     private class ScalingPanel extends JPanel {
         @Override
