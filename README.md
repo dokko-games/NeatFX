@@ -22,9 +22,13 @@ cd WinForJUI
 After doing this, open your IDE **from your terminal,** and it will automatically open the repository as a workspace.
 If you don't want to open it from your terminal just open the created folder WinForJUI on your code editor.
 It is recommended to use **IntelliJ Idea** when working **on** the project.
+#### Requirements:
+- FlatLaf
+- Lombok
 ## Features
 - Easy to Use ❤️
 - Compatible With Java Swing 📢
 - Good Looking Design ✅
+- Very Customizable ⚔️
 ## License
 WinForJUI is licensed under the license <i>LGPL-2.1</i>. See the [LICENSE](LICENSE) file for details.

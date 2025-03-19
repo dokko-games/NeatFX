@@ -10,17 +10,17 @@ import java.util.Collections;
 @Getter
 @Accessors(chain = true)
 @Setter
-//TODO: Add font instancing from sprite sheet
+//TODO: Add font instancing from sprite sheet - do in future commit
 public class Font4JUI {
     public enum Style {
-        REGULAR(Font.PLAIN), BOLD(Font.BOLD), ITALIC(Font.ITALIC);
-        private final int ival;
+        REGULAR(Font.PLAIN), BOLD(Font.BOLD), ITALIC(Font.ITALIC), BOLD_ITALIC(Font.BOLD | Font.ITALIC);
+        private final int iVal;
         Style(int style) {
-            this.ival = style;
+            this.iVal = style;
         }
 
         public int iVal() {
-            return ival;
+            return iVal;
         }
     }
 
