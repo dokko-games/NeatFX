@@ -13,6 +13,10 @@ import javax.swing.*;
 public class Design4JUI {
     private String name;
     private boolean dark;
-    private boolean decorated;
+    private Decoration decoration;
     private LookAndFeel lookAndFeel;
+
+    public boolean isDecorated() {
+        return !(decoration == Decoration.NONE || decoration == Decoration.DEFAULT);
+    }
 }

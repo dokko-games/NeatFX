@@ -1,5 +1,6 @@
 package com.dokko.win4jui.api.element;
 
+import com.dokko.win4jui.api.Input4JUI;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -117,7 +118,9 @@ public abstract class Element4JUI {
 
         // Adjust based on Y anchors
         if (anchors.isYCenter()) {
-            height *= scaleFactorH;
+            if(updateSize){
+                height *= scaleFactorH;
+            }
             y = (parentH / 2) + y - height / 2;
         } else if (anchors.isYBottom()) {
             if(updateSize){
@@ -133,12 +136,12 @@ public abstract class Element4JUI {
 
         // Adjust based on X anchors
         if (anchors.isXCenter()) {
-            width *= scaleFactorW;
-            x = (parentW / 2) + x - width / 2;
-        } else if (anchors.isXRight()) {
             if(updateSize){
                 width *= scaleFactorW;
             }
+            x = (parentW / 2) + x - width / 2;
+        } else if (anchors.isXRight()) {
+            width *= scaleFactorW;
             x = parentW - (x + width);
         } else if (anchors.isXFix()) {
             width *= scaleFactorW;
@@ -205,21 +208,6 @@ public abstract class Element4JUI {
     /**
      * Determines whether a point is within the given bounds. Override if your element uses custom bounds
      */
-    public boolean isBounded(float mouseX, float mouseY) {
-        // Adjust for scaling
-        float x = getXDistance()// + parent.getFixedXDistance();
-        ;
-        float y = getYDistance()// + parent.getFixedYDistance();
-        ;float[] fixedDimensions = fixAnchored(x, y, width, height);
-        x = fixedDimensions[0];
-        y = fixedDimensions[1];
-        width = fixedDimensions[2];
-        height = fixedDimensions[3];
-        return isBounded(mouseX, mouseY, x, y, width, height);
-    }
-    /**
-     * Determines whether a point is within the given bounds. Override if your element uses custom bounds
-     */
     public boolean isBounded(float mouseX, float mouseY, float x, float y, float width, float height) {
         return mouseX >= x && mouseY >= y && mouseX <= x + width && mouseY <= y + height;
     }
@@ -236,5 +224,15 @@ public abstract class Element4JUI {
      */
     protected void preProcessInput(float x, float y, float w, float h, float sw, float sh) {
         processInput(x, y, w, h, sw, sh);
+    }
+
+    public boolean isHovered() {
+        graphics.setColor(Color.green);
+        return isBounded(Input4JUI.getMouseX(), Input4JUI.getMouseY(), getAnchoredXDistance(), getAnchoredYDistance(), getAnchoredWidth(), getAnchoredHeight());
+    }
+
+    protected void drawDebugColliders(){
+        graphics.setColor(Color.green);
+        graphics.drawRect((int) getAnchoredXDistance(), (int) getAnchoredYDistance(), (int) getAnchoredWidth(), (int) getAnchoredHeight());
     }
 }

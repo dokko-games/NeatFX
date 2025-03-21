@@ -87,26 +87,19 @@ public class Text4JUI extends Element4JUI {
         // Draw the main text
         graphics.setColor(getForeground()); // Ensure the original color is restored
         graphics.drawString(text, x, y); // Draw the main text
+
+        //Draw debug colliders
+        drawDebugColliders();
     }
 
-    /**
-     * Pre-processes input, adjusting for the text's height and calling the input processing method.
-     *
-     * @param x The x-coordinate of the input event.
-     * @param y The y-coordinate of the input event.
-     * @param w The width of the input event's area.
-     * @param h The height of the input event's area.
-     * @param sw The scaling factor for the width.
-     * @param sh The scaling factor for the height.
-     */
-    @Override
-    public void preProcessInput(float x, float y, float w, float h, float sw, float sh) {
-        // Call the general input processing method
-        processInput(x, y, w, h, sw, sh);
-    }
 
     public Text4JUI setFontSize(int size) {
         getFont().setFontSize(size);
         return this;
+    }
+
+    @Override
+    public void processInput(float x, float y, float w, float h, float sw, float sh) {
+        markInputAsProcessed();
     }
 }
