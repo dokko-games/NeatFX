@@ -36,6 +36,7 @@ public class Text4JUI extends Element4JUI {
         this.text = text;
         this.font = new Font4JUI(Win4JUI.getDefaultFont(), Font4JUI.Style.BOLD, 18);
         setForeground(Color.white);
+        setUpdateSize(true);
     }
     /**
      * Renders the text to the provided Graphics2D context.
@@ -102,5 +103,10 @@ public class Text4JUI extends Element4JUI {
     public void preProcessInput(float x, float y, float w, float h, float sw, float sh) {
         // Call the general input processing method
         processInput(x, y, w, h, sw, sh);
+    }
+
+    public Text4JUI setFontSize(int size) {
+        getFont().setFontSize(size);
+        return this;
     }
 }

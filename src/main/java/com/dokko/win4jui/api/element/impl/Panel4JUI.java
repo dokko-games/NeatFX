@@ -50,13 +50,17 @@ public class Panel4JUI extends Element4JUI {
 
         // Draw panel decorations if enabled
         if (Win4JUI.getDesign().isDecorated()) {
+            float factor = scalingX;
+            if(width > 40) factor = 1;
+            float factor2 = scalingY;
+            if(height > 40) factor2 = 1;
             graphics.setColor(Colors4JUI.darken(graphics.getColor(), 1.5f));
-            graphics.fillRect(ix, iy, (int) (10 * scalingX), ih);
-            graphics.fillRect(ix, iy + ih - (int) (10 * scalingY), iw, (int) (10 * scalingY));
+            graphics.fillRect(ix, iy, (int) (10 * factor), ih);
+            graphics.fillRect(ix, iy + ih - (int) (10 * factor2), iw, (int) (10 * factor2));
 
             graphics.setColor(Colors4JUI.brighten(graphics.getColor(), 1.5f));
-            graphics.fillRect(ix + iw - (int) (10 * scalingX), iy, (int) (10 * scalingX), ih - (int) (10 * scalingY));
-            graphics.fillRect(ix + (int) (10 * scalingX), iy, iw - (int) (10 * scalingX), (int) (10 * scalingY));
+            graphics.fillRect(ix + iw - (int) (10 * factor), iy, (int) (10 * factor), ih - (int) (10 * factor2));
+            graphics.fillRect(ix + (int) (10 * factor), iy, iw - (int) (10 * factor), (int) (10 * factor2));
         }
     }
 }

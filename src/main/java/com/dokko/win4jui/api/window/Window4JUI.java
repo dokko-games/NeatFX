@@ -32,8 +32,8 @@ public class Window4JUI extends JFrame {
             float scalingFactorW = (float) getWidth() / targetWidth;
             float scalingFactorH = (float) getHeight() / targetHeight;
             for(Element4JUI element4JUI : getElements()) {
-                element4JUI.frameWidth = getWidth();
-                element4JUI.frameHeight = getHeight();
+                element4JUI.windowWidth = getWidth();
+                element4JUI.windowHeight = getHeight();
                 element4JUI.render(graphics2D, element4JUI.getXDistance(), element4JUI.getYDistance(),
                         element4JUI.getWidth(), element4JUI.getHeight(), scalingFactorW, scalingFactorH);
             }
@@ -44,11 +44,16 @@ public class Window4JUI extends JFrame {
         targetWidth = width;
         targetHeight = height;
         for(Element4JUI element4JUI : getElements()) {
-            element4JUI.frameTargetWidth = width;
-            element4JUI.frameTargetHeight = height;
+            element4JUI.windowTargetWidth = width;
+            element4JUI.windowTargetHeight = height;
         }
     }
     public Window4JUI(String title, int expectedWidth, int expectedHeight, int updatesPerSecond) {
+        if(Win4JUI.getScreenWidth() == 0){
+            //todo error
+            System.err.println("Error: SDK was not initialized (run Win4JUI.initialize)");
+            System.exit(-1);
+        }
         elements = new ArrayList<>();
         changeTargetSize(expectedWidth, expectedHeight);
         if(Win4JUI.getDeveloperScreenSize() != null){

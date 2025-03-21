@@ -33,7 +33,6 @@ public enum Anchors {
     private final int code;
     Anchors(int code){
         this.code = code;
-        System.out.println(name()+": "+code);
     }
 
     public boolean isXLeft() {

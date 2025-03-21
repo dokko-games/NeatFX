@@ -15,6 +15,7 @@ import java.util.ArrayList;
 @Setter
 @Accessors(chain = true)
 public abstract class Element4JUI {
+    private String ID;
     private float xDistance, yDistance, width, height;
     private Color foreground, background;
     private boolean processedInput = false;
@@ -23,8 +24,23 @@ public abstract class Element4JUI {
     private final ArrayList<Element4JUI> backgroundChildren = new ArrayList<>();
     private final ArrayList<Element4JUI> foregroundChildren = new ArrayList<>();
     public Graphics2D graphics;
-    public float frameWidth, frameHeight;
-    public float frameTargetWidth, frameTargetHeight;
+    private Element4JUI parent;
+    public float windowWidth, windowHeight;
+    public float windowTargetWidth, windowTargetHeight;
+    private boolean updateSize;
+
+    public float getAnchoredXDistance() {
+        return fixAnchored(getXDistance(), getYDistance(), getWidth(), getHeight())[0];
+    }
+    public float getAnchoredYDistance() {
+        return fixAnchored(getXDistance(), getYDistance(), getWidth(), getHeight())[1];
+    }
+    public float getAnchoredWidth() {
+        return fixAnchored(getXDistance(), getYDistance(), getWidth(), getHeight())[2];
+    }
+    public float getAnchoredHeight() {
+        return fixAnchored(getXDistance(), getYDistance(), getWidth(), getHeight())[3];
+    }
 
     /**
      * Marks the input as processed to prevent beginner errors.
@@ -73,7 +89,7 @@ public abstract class Element4JUI {
 
         // Render background children
         for (Element4JUI element : backgroundChildren) {
-            element.render(graphics, x + element.getXDistance(), y + element.getYDistance(), element.getWidth(), element.getHeight(), scalingX, scalingY);
+            element.render(graphics, element.getXDistance(), element.getYDistance(), element.getWidth(), element.getHeight(), scalingX, scalingY);
         }
 
         this.graphics = graphics;
@@ -89,23 +105,28 @@ public abstract class Element4JUI {
 
         // Render foreground children
         for (Element4JUI element : foregroundChildren) {
-            element.render(graphics, x + element.getXDistance(), y + element.getYDistance(), element.getWidth(), element.getHeight(), scalingX, scalingY);
+            element.render(graphics, element.getXDistance(), element.getYDistance(), element.getWidth(), element.getHeight(), scalingX, scalingY);
         }
     }
     /**
      * Adjusts position and size based on anchor settings.
      */
     private float[] fixAnchored(float x, float y, float width, float height) {
+        float parentW = (parent != null) ? parent.getAnchoredWidth() : windowWidth;
+        float parentH = (parent != null) ? parent.getAnchoredHeight() : windowHeight;
+
         // Adjust based on Y anchors
         if (anchors.isYCenter()) {
             height *= scaleFactorH;
-            y = (frameHeight / 2) + y - height / 2;
+            y = (parentH / 2) + y - height / 2;
         } else if (anchors.isYBottom()) {
-            height *= scaleFactorH;
-            y = frameHeight - (y + height);
+            if(updateSize){
+                height *= scaleFactorH;
+            }
+            y = parentH - (y + height);
         } else if (anchors.isYFix()) {
-            y *= scaleFactorH;
-        }  else if (anchors.isYScaled()) {
+            height *= scaleFactorH;
+        } else if (anchors.isYScaled()) {
             y *= scaleFactorH;
             height *= scaleFactorH;
         }
@@ -113,18 +134,27 @@ public abstract class Element4JUI {
         // Adjust based on X anchors
         if (anchors.isXCenter()) {
             width *= scaleFactorW;
-            x = (frameWidth / 2) + x - width / 2;
+            x = (parentW / 2) + x - width / 2;
         } else if (anchors.isXRight()) {
-            width *= scaleFactorW;
-            x = frameWidth - (x + width);
+            if(updateSize){
+                width *= scaleFactorW;
+            }
+            x = parentW - (x + width);
         } else if (anchors.isXFix()) {
-            x *= scaleFactorW;
+            width *= scaleFactorW;
         } else if (anchors.isXScaled()) {
             x *= scaleFactorW;
             width *= scaleFactorW;
         }
+        // Ensure element stays within parent's bounds
+        if (parent != null) {
+            x += parent.getAnchoredXDistance();
+            y += parent.getAnchoredYDistance();
+        }
+
         return new float[]{x, y, width, height};
     }
+
     /**
      * Abstract method for rendering. Must be implemented by subclasses.
      */
@@ -132,16 +162,38 @@ public abstract class Element4JUI {
     /**
      * Adds an element to the foreground layer (children that will be drawn on top of this element).
      */
-    public Element4JUI addF(Element4JUI element) {
+    public Element4JUI addForeground(Element4JUI element) {
+        element.setParent(this);
         foregroundChildren.add(element);
         return this;
     }
     /**
      * Adds an element to the background layer (children that will be drawn below this element).
      */
-    public Element4JUI addB(Element4JUI element) {
+    public Element4JUI addBackground(Element4JUI element) {
+        element.setParent(this);
         backgroundChildren.add(element);
         return this;
+    }
+    public Element4JUI removeForeground(String id){
+        for(Element4JUI e : getForegroundChildren()){
+            if(e.getID().equalsIgnoreCase(id)){
+                getForegroundChildren().remove(e);
+                e.setParent(null);
+                return e;
+            }
+        }
+        return null;
+    }
+    public Element4JUI removeBackground(String id){
+        for(Element4JUI e : getBackgroundChildren()){
+            if(e.getID().equalsIgnoreCase(id)){
+                getBackgroundChildren().remove(e);
+                e.setParent(null);
+                return e;
+            }
+        }
+        return null;
     }
 
     /**
@@ -151,26 +203,27 @@ public abstract class Element4JUI {
         markInputAsProcessed();
     }
     /**
-     * Determines whether the given coordinates are within the element's bounds.
+     * Determines whether a point is within the given bounds. Override if your element uses custom bounds
      */
-    public boolean isBounded(float x, float y) {
-        return isBounded(x, y, getXDistance(), getYDistance(), getWidth(), getHeight());
+    public boolean isBounded(float mouseX, float mouseY) {
+        // Adjust for scaling
+        float x = getXDistance()// + parent.getFixedXDistance();
+        ;
+        float y = getYDistance()// + parent.getFixedYDistance();
+        ;float[] fixedDimensions = fixAnchored(x, y, width, height);
+        x = fixedDimensions[0];
+        y = fixedDimensions[1];
+        width = fixedDimensions[2];
+        height = fixedDimensions[3];
+        return isBounded(mouseX, mouseY, x, y, width, height);
     }
     /**
      * Determines whether a point is within the given bounds. Override if your element uses custom bounds
      */
     public boolean isBounded(float mouseX, float mouseY, float x, float y, float width, float height) {
-        // Adjust for scaling
-        float[] fixedDimensions = fixAnchored(x, y, width, height);
-        x = fixedDimensions[0];
-        y = fixedDimensions[1];
-        width = fixedDimensions[2];
-        height = fixedDimensions[3];
-        return isBoundedRaw(mouseX, mouseY, x, y, width, height);
-    }
-    public boolean isBoundedRaw(float mouseX, float mouseY, float x, float y, float width, float height) {
         return mouseX >= x && mouseY >= y && mouseX <= x + width && mouseY <= y + height;
     }
+
 
     /**
      * Runs before processInput. Used by subclasses to modify the input data before sending it to custom instances

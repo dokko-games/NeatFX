@@ -7,7 +7,6 @@ import com.dokko.win4jui.api.element.impl.Panel4JUI;
 import com.dokko.win4jui.api.element.impl.Text4JUI;
 import com.dokko.win4jui.api.window.Window4JUI;
 
-import java.awt.*;
 
 public class Main { //TODO: ImageRenderer4JUI
     public static void main(String[] args) {
@@ -15,11 +14,16 @@ public class Main { //TODO: ImageRenderer4JUI
             Win4JUI.setDeveloperScreenSize(1920, 1080);
             Win4JUI.setDesign(new DefaultDarkDesign());
             Win4JUI.initialize();
-            Window4JUI window4JUI = new Window4JUI("Win4JUI Screen: " + Win4JUI.getScreenWidth()+"x"+Win4JUI.getScreenHeight(), 1100, 800, 30);
-            window4JUI.getElements().add(new Panel4JUI(12, 12, 300, 776, Anchors.SCALED_LEFT));
-            window4JUI.getElements().add(new Panel4JUI(0, 24, 950, 100, Anchors.BOTTOM_CENTER).setBackground(Color.darkGray));
-            window4JUI.getElements().add(new Text4JUI("Anchored to the right", 4, 4, Anchors.CENTER_RIGHT).setShadow(true).setScaleText(false).setForeground(Color.blue));
-            window4JUI.getElements().add(new Text4JUI("Anchored to the top", 0, 2, Anchors.TOP_CENTER).setBackground(Color.CYAN));
+            Window4JUI window4JUI = new Window4JUI("Win4JUI Test Application", 1100, 800, 30);
+            Panel4JUI leftPanel = new Panel4JUI(5, 5, 300, 790, Anchors.SCALED_LEFT);
+            leftPanel.addForeground(new Text4JUI("Win4JUI Test Application", 4, 4, Anchors.TOP_CENTER)
+                    .setShadow(true).setFontSize(11).setScaleText(false));
+            window4JUI.getElements().add(leftPanel);
+
+            Panel4JUI rightPanel = new Panel4JUI(5, 5, 300, 790, Anchors.SCALED_RIGHT);
+            rightPanel.addForeground(new Text4JUI("SDK version "+Win4JUI.SDK_VERSION, 4, 4, Anchors.BOTTOM_RIGHT)
+                    .setScaleText(false).setShadow(true).setFontSize(14));
+            window4JUI.getElements().add(rightPanel);
             window4JUI.setVisible(true);
         } catch (Exception e) {
             System.err.println(e.getMessage());

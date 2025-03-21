@@ -12,6 +12,7 @@ import java.awt.*;
  * @since v0.0
  */
 public class Win4JUI {
+    public static final int SDK_VERSION = 0x1000001;
     @Getter
     private static int screenWidth, screenHeight;
     private static int developerScreenWidth = 0, developerScreenHeight = 0;
