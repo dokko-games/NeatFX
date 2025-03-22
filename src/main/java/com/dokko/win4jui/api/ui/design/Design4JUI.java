@@ -1,4 +1,4 @@
-package com.dokko.win4jui.api.design;
+package com.dokko.win4jui.api.ui.design;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,10 +1,10 @@
-package com.dokko.win4jui.api.element.impl;
+package com.dokko.win4jui.api.ui.element.impl;
 
 import com.dokko.win4jui.Win4JUI;
 import com.dokko.win4jui.api.Colors4JUI;
-import com.dokko.win4jui.api.design.Decoration;
-import com.dokko.win4jui.api.element.Anchors;
-import com.dokko.win4jui.api.element.Element4JUI;
+import com.dokko.win4jui.api.ui.design.Decoration;
+import com.dokko.win4jui.api.ui.element.Anchors;
+import com.dokko.win4jui.api.ui.element.Element4JUI;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -58,7 +58,7 @@ public class Panel4JUI extends Element4JUI {
         Decoration util = decoration;
         if(decoration == Decoration.DEFAULT) util = Win4JUI.getDesign().getDecoration();
         // Draw panel decorations if enabled
-        switch (decoration){
+        switch (util){
             case BEVEL: {
                 float factor = scalingX;
                 if(width > 40) factor = 1;

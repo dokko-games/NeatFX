@@ -1,4 +1,4 @@
-package com.dokko.win4jui.api.font;
+package com.dokko.win4jui.api.ui.font;
 
 import lombok.Getter;
 import lombok.Setter;

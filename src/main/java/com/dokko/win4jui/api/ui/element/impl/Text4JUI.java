@@ -1,9 +1,9 @@
-package com.dokko.win4jui.api.element.impl;
+package com.dokko.win4jui.api.ui.element.impl;
 
 import com.dokko.win4jui.Win4JUI;
-import com.dokko.win4jui.api.element.Anchors;
-import com.dokko.win4jui.api.element.Element4JUI;
-import com.dokko.win4jui.api.font.Font4JUI;
+import com.dokko.win4jui.api.ui.element.Anchors;
+import com.dokko.win4jui.api.ui.element.Element4JUI;
+import com.dokko.win4jui.api.ui.font.Font4JUI;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -36,7 +36,6 @@ public class Text4JUI extends Element4JUI {
         this.text = text;
         this.font = new Font4JUI(Win4JUI.getDefaultFont(), Font4JUI.Style.BOLD, 18);
         setForeground(Color.white);
-        setUpdateSize(true);
     }
     /**
      * Renders the text to the provided Graphics2D context.
@@ -96,10 +95,5 @@ public class Text4JUI extends Element4JUI {
     public Text4JUI setFontSize(int size) {
         getFont().setFontSize(size);
         return this;
-    }
-
-    @Override
-    public void processInput(float x, float y, float w, float h, float sw, float sh) {
-        markInputAsProcessed();
     }
 }

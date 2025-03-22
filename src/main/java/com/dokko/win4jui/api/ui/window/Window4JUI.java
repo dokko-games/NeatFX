@@ -1,8 +1,9 @@
-package com.dokko.win4jui.api.window;
+package com.dokko.win4jui.api.ui.window;
 
 import com.dokko.win4jui.Win4JUI;
-import com.dokko.win4jui.api.Input4JUI;
-import com.dokko.win4jui.api.element.Element4JUI;
+import com.dokko.win4jui.api.Logger4JUI;
+import com.dokko.win4jui.api.ui.Input4JUI;
+import com.dokko.win4jui.api.ui.element.Element4JUI;
 import lombok.Getter;
 
 import javax.swing.*;
@@ -50,9 +51,8 @@ public class Window4JUI extends JFrame {
     }
     public Window4JUI(String title, int expectedWidth, int expectedHeight, int updatesPerSecond) {
         if(Win4JUI.getScreenWidth() == 0){
-            //todo error
-            System.err.println("Error: SDK was not initialized (run Win4JUI.initialize)");
-            System.exit(-1);
+            Logger4JUI.fatal("Error: SDK was not initialized (run Win4JUI.initialize)");
+            Win4JUI.exit(-1);
         }
         elements = new ArrayList<>();
         changeTargetSize(expectedWidth, expectedHeight);
@@ -64,7 +64,14 @@ public class Window4JUI extends JFrame {
         }
         setSize(expectedWidth, expectedHeight);
         setTitle(title);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                //TODO run anything like warning popups
+                Win4JUI.exit(0);
+            }
+        });
         setLocationRelativeTo(null);
         ScalingPanel scalingPanel = getScalingPanel(updatesPerSecond);
         add(scalingPanel);
@@ -76,21 +83,25 @@ public class Window4JUI extends JFrame {
         scalingPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                Input4JUI.update();
                 Input4JUI.setButtonDown(e.getButton(), true);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                Input4JUI.update();
                 Input4JUI.setButtonDown(e.getButton(), false);
             }
         });
         scalingPanel.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
+                Input4JUI.update();
                 Input4JUI.setPosition(e.getX(), e.getY());
             }
             @Override
             public void mouseDragged(MouseEvent e) {
+                Input4JUI.update();
                 Input4JUI.setPosition(e.getX(), e.getY());
             }
         });
@@ -101,6 +112,7 @@ public class Window4JUI extends JFrame {
                 int keyCode = e.getKeyCode();
                 if (!pressedKeys.contains(keyCode)) {  // Only trigger once per key press
                     pressedKeys.add(keyCode);
+                    Input4JUI.update();
                     Input4JUI.setKeyDown(keyCode, true);
                 }
             }
@@ -108,6 +120,7 @@ public class Window4JUI extends JFrame {
             @Override
             public void keyReleased(KeyEvent e) {
                 int keyCode = e.getKeyCode();
+                Input4JUI.update();
                 Input4JUI.setKeyDown(keyCode, false);
                 pressedKeys.remove(keyCode); // Remove from the set when released
             }

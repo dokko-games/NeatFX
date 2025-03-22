@@ -1,7 +1,7 @@
-package com.dokko.win4jui.api.design.impl;
+package com.dokko.win4jui.api.ui.design.impl;
 
-import com.dokko.win4jui.api.design.Decoration;
-import com.dokko.win4jui.api.design.Design4JUI;
+import com.dokko.win4jui.api.ui.design.Decoration;
+import com.dokko.win4jui.api.ui.design.Design4JUI;
 import com.formdev.flatlaf.FlatDarculaLaf;
 
 public class DefaultDarkDesign extends Design4JUI { //TODO: methods for decorations

@@ -1,6 +1,8 @@
-package com.dokko.win4jui.api.element;
+package com.dokko.win4jui.api.ui.element;
 
-import com.dokko.win4jui.api.Input4JUI;
+import com.dokko.win4jui.Win4JUI;
+import com.dokko.win4jui.api.error.Error4JUI;
+import com.dokko.win4jui.api.ui.Input4JUI;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -28,7 +30,6 @@ public abstract class Element4JUI {
     private Element4JUI parent;
     public float windowWidth, windowHeight;
     public float windowTargetWidth, windowTargetHeight;
-    private boolean updateSize;
 
     public float getAnchoredXDistance() {
         return fixAnchored(getXDistance(), getYDistance(), getWidth(), getHeight())[0];
@@ -98,10 +99,8 @@ public abstract class Element4JUI {
         preProcessInput(x, y, width, height, scalingX, scalingY);
 
         if (!processedInput) {
-            System.err.println("Input was not processed successfully for " + this + ". Possible causes:");
-            System.err.println("1 - The overridden method preProcessInput() did not call processInput().");
-            System.err.println("2 - The overridden method processInput() did not call super.markInputAsProcessed().");
-            System.exit(-1);
+            Win4JUI.processError(new Error4JUI("InputProcessError", "Input was not processed successfully for "+this,
+                    new Error4JUI.ErrorData(1, 5, 3, true)));
         }
 
         // Render foreground children
@@ -115,39 +114,24 @@ public abstract class Element4JUI {
     private float[] fixAnchored(float x, float y, float width, float height) {
         float parentW = (parent != null) ? parent.getAnchoredWidth() : windowWidth;
         float parentH = (parent != null) ? parent.getAnchoredHeight() : windowHeight;
-
+        if(anchors.isXScaled()){
+            width *= scaleFactorW;
+        }
+        if(anchors.isYScaled()){
+            height *= scaleFactorH;
+        }
         // Adjust based on Y anchors
         if (anchors.isYCenter()) {
-            if(updateSize){
-                height *= scaleFactorH;
-            }
             y = (parentH / 2) + y - height / 2;
         } else if (anchors.isYBottom()) {
-            if(updateSize){
-                height *= scaleFactorH;
-            }
             y = parentH - (y + height);
-        } else if (anchors.isYFix()) {
-            height *= scaleFactorH;
-        } else if (anchors.isYScaled()) {
-            y *= scaleFactorH;
-            height *= scaleFactorH;
         }
 
         // Adjust based on X anchors
         if (anchors.isXCenter()) {
-            if(updateSize){
-                width *= scaleFactorW;
-            }
             x = (parentW / 2) + x - width / 2;
         } else if (anchors.isXRight()) {
-            width *= scaleFactorW;
             x = parentW - (x + width);
-        } else if (anchors.isXFix()) {
-            width *= scaleFactorW;
-        } else if (anchors.isXScaled()) {
-            x *= scaleFactorW;
-            width *= scaleFactorW;
         }
         // Ensure element stays within parent's bounds
         if (parent != null) {
@@ -227,12 +211,16 @@ public abstract class Element4JUI {
     }
 
     public boolean isHovered() {
-        graphics.setColor(Color.green);
         return isBounded(Input4JUI.getMouseX(), Input4JUI.getMouseY(), getAnchoredXDistance(), getAnchoredYDistance(), getAnchoredWidth(), getAnchoredHeight());
     }
 
     protected void drawDebugColliders(){
+        if(!Win4JUI.SDK_IS_DEBUG)return;
         graphics.setColor(Color.green);
         graphics.drawRect((int) getAnchoredXDistance(), (int) getAnchoredYDistance(), (int) getAnchoredWidth(), (int) getAnchoredHeight());
+    }
+
+    protected void exit(int code){
+        Win4JUI.exit(code);
     }
 }
