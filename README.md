@@ -21,7 +21,9 @@ window resolutions and input handling or crash handling.
 ## Why?
 Java's **_Swing library_** is outdated and confusing for beginners. Other libraries like JavaFX are hard to install
 and finally, more low-level libraries like OpenGL or Vulkan are extremely complicated,
-especially for a programmer that is just getting started with java
+especially for a programmer that is just getting started with java.<br>
+<br>For That reason, I made **Win4JUI**, a library that takes the good stuff of the most common UI methods in the language and 
+mixes them to create the best framework possible.
 ## Installation
 ### For Users
 Go into [Releases](https://github.com/dokko-games/WinForJUI/releases) and select the version you want.
