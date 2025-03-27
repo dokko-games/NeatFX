@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Utility class to set up everything needed for the API to work. Also holds some values for developer usage like the user's screen dimensions.
@@ -95,7 +96,10 @@ public class Win4JUI {
         return Win4JUI.getScreenWidth()+"x"+Win4JUI.getScreenHeight();
     }
 
+    public static final ArrayList<Runnable> runOnShutdown = new ArrayList<>();
+
     public static void exit(int code){
+        runOnShutdown.forEach(Runnable::run);
         if(code < 0){
             Logger4JUI.error("Exited app with exit code '%{0}': %{1} messages, %{2} warnings, %{3} errors and %{4} critical errors"
                     , code, Logger4JUI.infos, Logger4JUI.warnings, Logger4JUI.errors, Logger4JUI.fatals);

@@ -18,6 +18,13 @@ public class Main { //TODO: ImageRenderer4JUI
             Win4JUI.setDesign(new DefaultDarkDesign());
             Win4JUI.initialize();
             Window4JUI window4JUI = new Window4JUI("Win4JUI Test Application", 1100, 800, 30);
+            Win4JUI.runOnShutdown.add(new Runnable() {
+                @Override
+                public void run() {
+                    if(window4JUI.isClosing()) Logger4JUI.warn("Window Closed.");
+                    else Logger4JUI.warn("Window Not Closed.");
+                }
+            });
             Panel4JUI leftPanel = new Panel4JUI(5, 5, 300, 790, Anchors.TOP_SCALE_LEFT);
             leftPanel.addForeground(new Text4JUI("Win4JUI Test Application", 4, 4, Anchors.SCALE_TOP_CENTER)
                     .setShadow(true).setFontSize(11).setScaleText(false));

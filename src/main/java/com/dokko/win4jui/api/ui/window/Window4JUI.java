@@ -5,6 +5,7 @@ import com.dokko.win4jui.api.Logger4JUI;
 import com.dokko.win4jui.api.ui.Input4JUI;
 import com.dokko.win4jui.api.ui.element.Element4JUI;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +21,9 @@ public class Window4JUI extends JFrame {
     private int targetWidth, targetHeight;
     @Getter
     private final ArrayList<Element4JUI> elements;
+    @Getter
+    @Setter
+    private boolean closing;
 
     private class ScalingPanel extends JPanel {
         public ScalingPanel(int fps) {
@@ -29,6 +33,7 @@ public class Window4JUI extends JFrame {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
+            setClosing(false);
             Graphics2D graphics2D = (Graphics2D) g;
             float scalingFactorW = (float) getWidth() / targetWidth;
             float scalingFactorH = (float) getHeight() / targetHeight;
@@ -67,7 +72,7 @@ public class Window4JUI extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                //TODO run anything like warning popups
+                setClosing(true);
                 Win4JUI.exit(0);
             }
         });
