@@ -67,6 +67,11 @@ public class Button4JUI extends Element4JUI {
     }
 
     @Override
+    public boolean isHovered() {
+        return panel.isHovered();
+    }
+
+    @Override
     public Color getBackground() {
         return panel.getBackground();
     }
