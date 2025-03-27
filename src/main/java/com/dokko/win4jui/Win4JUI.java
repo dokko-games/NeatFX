@@ -15,7 +15,7 @@ import java.awt.*;
  */
 public class Win4JUI {
     public static final String SDK_NAME = "Win4JUI";
-    public static final long SDK_VERSION = 0x00101220325L;
+    public static final long SDK_VERSION = 0x10101220325L;
     // FORMAT: 0x I (debug) II (major) II (minor) II (release day) II (release month) II (release year)
     public static final boolean SDK_IS_DEBUG = (SDK_VERSION & 0xF0000000000L) != 0;
 
@@ -107,6 +107,6 @@ public class Win4JUI {
     }
 
     public static void processError(Error4JUI error) {
-        error.printStackTrace();
+        error.print();
     }
 }

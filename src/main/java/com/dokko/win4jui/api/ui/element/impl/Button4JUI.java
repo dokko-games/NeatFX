@@ -1,6 +1,6 @@
 package com.dokko.win4jui.api.ui.element.impl;
 
-import com.dokko.win4jui.api.ui.design.Decoration;
+import com.dokko.win4jui.Win4JUI;
 import com.dokko.win4jui.api.ui.element.Anchors;
 import com.dokko.win4jui.api.ui.element.Element4JUI;
 
@@ -23,12 +23,26 @@ public class Button4JUI extends Element4JUI {
         super(xDistance, yDistance, width, height, anchors);
         panel = new Panel4JUI(xDistance, yDistance, width, height, anchors) {
             @Override
+            protected void doRender(Graphics2D graphics, float x, float y, float width, float height, float scalingX, float scalingY) {
+                // Set background color or default to gray
+                graphics.setColor(getBackground());
+
+                int ix = (int) x;
+                int iy = (int) y;
+                int iw = (int) width;
+                int ih = (int) height;
+
+                graphics.fillRect(ix, iy, iw, ih);
+
+                Win4JUI.getDesign().decorateButton(graphics, x, y, width, height, scalingX, scalingY, getBackground());
+            }
+
+            @Override
             protected void preProcessInput(float x, float y, float w, float h, float sw, float sh) {
                 markInputAsProcessed();
                 onInput(x, y, w, h, sw, sh);
             }
         };
-        panel.setDecoration(Decoration.OUTLINE);
         label = new Text4JUI(text, 0, 0, Anchors.SCALE_CENTERED).setScaleText(anchors.isXScaled());
         panel.addForeground(label);
         addForeground(panel);
@@ -50,6 +64,16 @@ public class Button4JUI extends Element4JUI {
     public Element4JUI setForeground(Color foreground) {
         label.setForeground(foreground);
         return this;
+    }
+
+    @Override
+    public Color getBackground() {
+        return panel.getBackground();
+    }
+
+    @Override
+    public Color getForeground() {
+        return label.getForeground();
     }
 
     public void onInput(float x, float y, float width, float height, float scaleWidth, float scaleHeight) {}

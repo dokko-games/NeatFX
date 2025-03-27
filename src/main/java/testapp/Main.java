@@ -1,6 +1,7 @@
 package testapp;
 
 import com.dokko.win4jui.Win4JUI;
+import com.dokko.win4jui.api.Logger4JUI;
 import com.dokko.win4jui.api.ui.Input4JUI;
 import com.dokko.win4jui.api.ui.design.impl.DefaultDarkDesign;
 import com.dokko.win4jui.api.ui.element.Anchors;
@@ -36,7 +37,9 @@ public class Main { //TODO: ImageRenderer4JUI
             });
             window4JUI.setVisible(true);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            Logger4JUI.fatal("%{0}", e.getMessage());
+            Logger4JUI.fatalNoCount("%{0}", e.getStackTrace()[0]);
+            Win4JUI.exit(-1);
         }
     }
 }

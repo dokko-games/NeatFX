@@ -79,8 +79,7 @@ public class Text4JUI extends Element4JUI {
 
         // Draw shadow if enabled
         if (shadow) {
-            graphics.setColor(getForeground().darker().darker().darker()); // Set shadow color (darkened version)
-            graphics.drawString(text, x + 2, y + 2);  // Draw the shadow with slight offset
+            Win4JUI.getDesign().drawTextShadow(graphics, getText(), x, y, getForeground());
         }
 
         // Draw the main text

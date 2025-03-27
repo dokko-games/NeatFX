@@ -40,7 +40,6 @@ public class Window4JUI extends JFrame {
             }
         }
     }
-    @SuppressWarnings("unused")
     public void changeTargetSize(int width, int height){
         targetWidth = width;
         targetHeight = height;

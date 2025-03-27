@@ -25,8 +25,7 @@ public class Error4JUI extends RuntimeException {
             return -level;
         }
     }
-    @Override
-    public void printStackTrace() {
+    public void print() {
         Logger4JUI.error("%{0} thrown: %{1}.", getName(), getDescription());
         Logger4JUI.errorNoCount("Error Cause: %{0}", getData().getCause());
         Logger4JUI.errorNoCount("Error Level: %{0}", getData().getLevel());

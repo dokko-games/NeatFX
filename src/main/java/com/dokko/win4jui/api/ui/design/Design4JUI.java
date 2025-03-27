@@ -6,17 +6,17 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.swing.*;
+import java.awt.*;
+
 @Getter
 @Accessors(chain = true)
 @Setter
 @AllArgsConstructor
-public class Design4JUI {
+public abstract class Design4JUI {
     private String name;
-    private boolean dark;
-    private Decoration decoration;
     private LookAndFeel lookAndFeel;
 
-    public boolean isDecorated() {
-        return !(decoration == Decoration.NONE || decoration == Decoration.DEFAULT);
-    }
+    public abstract void decoratePanel(Graphics2D graphics, float x, float y, float width, float height, float scalingX, float scalingY, Color color);
+    public abstract void decorateButton(Graphics2D graphics, float x, float y, float width, float height, float scalingX, float scalingY, Color color);
+    public abstract void drawTextShadow(Graphics2D graphics, String text, float x, float y, Color color);
 }
