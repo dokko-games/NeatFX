@@ -43,7 +43,7 @@ public class Button4JUI extends Element4JUI {
                 onInput(x, y, w, h, sw, sh);
             }
         };
-        label = new Text4JUI(text, 0, 0, Anchors.SCALE_CENTERED).setScaleText(anchors.isXScaled());
+        label = new Text4JUI(text, 0, 0, Anchors.SCALE_CENTERED).setScaleText(anchors.isWidthScaled());
         panel.addForeground(label);
         addForeground(panel);
         label.setFontSize(14);

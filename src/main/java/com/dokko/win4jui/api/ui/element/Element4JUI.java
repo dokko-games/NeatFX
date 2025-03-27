@@ -114,10 +114,16 @@ public abstract class Element4JUI {
     private float[] fixAnchored(float x, float y, float width, float height) {
         float parentW = (parent != null) ? parent.getAnchoredWidth() : windowWidth;
         float parentH = (parent != null) ? parent.getAnchoredHeight() : windowHeight;
-        if(anchors.isXScaled()){
+        if(anchors.isXScaled()) {
+            x *= scaleFactorW;
+        }
+        if(anchors.isYScaled()) {
+            y *= scaleFactorH;
+        }
+        if(anchors.isWidthScaled()){
             width *= scaleFactorW;
         }
-        if(anchors.isYScaled()){
+        if(anchors.isHeightScaled()){
             height *= scaleFactorH;
         }
         // Adjust based on Y anchors
