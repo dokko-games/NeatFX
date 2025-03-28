@@ -5,7 +5,8 @@ window resolutions and input handling or crash handling.
 
 > [!NOTE]
 > This project is still in development and will probably contain many errors and issues.
-> Please report any problems or give feedback on [the issues tab](https://github.com/dokko-games/WinForJUI/issues)
+> Please report any problems or give feedback on [the issues tab](https://github.com/dokko-games/WinForJUI/issues).
+> It will also probably go under huge changes in the future like changing the graphics API, so it's better to wait for full releases before using it.
 
 ![License](https://img.shields.io/github/license/dokko-games/WinForJUI)
 
