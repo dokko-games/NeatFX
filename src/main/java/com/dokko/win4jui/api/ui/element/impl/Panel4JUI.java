@@ -2,6 +2,7 @@ package com.dokko.win4jui.api.ui.element.impl;
 
 import com.dokko.win4jui.Win4JUI;
 
+import com.dokko.win4jui.api.render.Renderer2D;
 import com.dokko.win4jui.api.ui.element.Anchors;
 import com.dokko.win4jui.api.ui.element.Element4JUI;
 import lombok.Getter;
@@ -33,7 +34,7 @@ public class Panel4JUI extends Element4JUI {
     /**
      * Renders the panel, applying background color and optional decorations.
      *
-     * @param graphics The graphics context.
+     * @param renderer2D The graphics context.
      * @param x The x position of the panel.
      * @param y The y position of the panel.
      * @param width The width of the panel.
@@ -42,17 +43,12 @@ public class Panel4JUI extends Element4JUI {
      * @param scalingY The vertical scaling factor.
      */
     @Override
-    protected void doRender(Graphics2D graphics, float x, float y, float width, float height, float scalingX, float scalingY) {
+    protected void doRender(Renderer2D renderer2D, float x, float y, float width, float height, float scalingX, float scalingY) {
         // Set background color or default to gray
-        graphics.setColor(getBackground());
+        renderer2D.color(getBackground());
 
-        int ix = (int) x;
-        int iy = (int) y;
-        int iw = (int) width;
-        int ih = (int) height;
+        renderer2D.drawRect(x, y, width, height);
 
-        graphics.fillRect(ix, iy, iw, ih);
-
-        Win4JUI.getDesign().decoratePanel(graphics, x, y, width, height, scalingX, scalingY, getBackground());
+        Win4JUI.getDesign().decoratePanel(renderer2D.getJavaGraphics(), x, y, width, height, scalingX, scalingY, getBackground());
     }
 }

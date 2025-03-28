@@ -2,6 +2,7 @@ package com.dokko.win4jui.api.ui.window;
 
 import com.dokko.win4jui.Win4JUI;
 import com.dokko.win4jui.api.Logger4JUI;
+import com.dokko.win4jui.api.render.Renderer2D;
 import com.dokko.win4jui.api.ui.Input4JUI;
 import com.dokko.win4jui.api.ui.element.Element4JUI;
 import lombok.Getter;
@@ -18,6 +19,8 @@ import java.util.Set;
  * @since v0.0
  */
 public class Window4JUI extends JFrame {
+    private final Renderer2D windowRenderer;
+
     private int targetWidth, targetHeight;
     @Getter
     private final ArrayList<Element4JUI> elements;
@@ -35,12 +38,13 @@ public class Window4JUI extends JFrame {
             super.paintComponent(g);
             setClosing(false);
             Graphics2D graphics2D = (Graphics2D) g;
+            windowRenderer.setJavaGraphics(graphics2D);
             float scalingFactorW = (float) getWidth() / targetWidth;
             float scalingFactorH = (float) getHeight() / targetHeight;
             for(Element4JUI element4JUI : getElements()) {
                 element4JUI.windowWidth = getWidth();
                 element4JUI.windowHeight = getHeight();
-                element4JUI.render(graphics2D, element4JUI.getXDistance(), element4JUI.getYDistance(),
+                element4JUI.render(windowRenderer, element4JUI.getXDistance(), element4JUI.getYDistance(),
                         element4JUI.getWidth(), element4JUI.getHeight(), scalingFactorW, scalingFactorH);
             }
         }
@@ -79,6 +83,7 @@ public class Window4JUI extends JFrame {
         setLocationRelativeTo(null);
         ScalingPanel scalingPanel = getScalingPanel(updatesPerSecond);
         add(scalingPanel);
+        windowRenderer = new Renderer2D(null);
     }
 
     private ScalingPanel getScalingPanel(int fps) {

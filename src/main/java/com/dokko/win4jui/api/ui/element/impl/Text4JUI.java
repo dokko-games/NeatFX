@@ -1,6 +1,7 @@
 package com.dokko.win4jui.api.ui.element.impl;
 
 import com.dokko.win4jui.Win4JUI;
+import com.dokko.win4jui.api.render.Renderer2D;
 import com.dokko.win4jui.api.ui.element.Anchors;
 import com.dokko.win4jui.api.ui.element.Element4JUI;
 import com.dokko.win4jui.api.ui.font.Font4JUI;
@@ -40,7 +41,7 @@ public class Text4JUI extends Element4JUI {
     /**
      * Renders the text to the provided Graphics2D context.
      *
-     * @param graphics The Graphics2D context where the text will be drawn.
+     * @param renderer The Graphics2D context where the text will be drawn.
      * @param x The x-coordinate where the text will be drawn.
      * @param y The y-coordinate where the text will be drawn.
      * @param width The width of the area where the text will be rendered.
@@ -49,20 +50,20 @@ public class Text4JUI extends Element4JUI {
      * @param scalingY The scaling factor for the y-axis.
      */
     @Override
-    protected void doRender(Graphics2D graphics, float x, float y, float width, float height, float scalingX, float scalingY) {
+    protected void doRender(Renderer2D renderer, float x, float y, float width, float height, float scalingX, float scalingY) {
         // Set up the font using Font4JUI settings
         Font swingFont = font.getSwingFont();
-        graphics.setFont(swingFont);
+        renderer.getJavaGraphics().setFont(swingFont);
 
         // Apply scaling to the font if scaling is enabled
         if (scaleText) {
             float scaledSize = swingFont.getSize() * scalingX; // Scale font size based on x scaling
             swingFont = swingFont.deriveFont(scaledSize);
-            graphics.setFont(swingFont);
+            renderer.getJavaGraphics().setFont(swingFont);
         }
 
         // Get font metrics to determine text dimensions
-        FontMetrics fontMetrics = graphics.getFontMetrics();
+        FontMetrics fontMetrics = renderer.getJavaGraphics().getFontMetrics();
         setWidth(fontMetrics.stringWidth(text) / scalingX); // Set the width based on text length
         setHeight(fontMetrics.getHeight() / scalingY); // Set the height based on font height
         textHeight = fontMetrics.getHeight(); // Store the height of the text
@@ -70,21 +71,21 @@ public class Text4JUI extends Element4JUI {
 
         // Render background if it is set
         if (getBackground() != null) {
-            graphics.setColor(getBackground());
-            graphics.fillRect((int) x, (int) (y - getHeight()), (int) (getWidth() * scalingX), (int) getHeight());
+            renderer.color(getBackground());
+            renderer.drawRect(x, y - getHeight(), getWidth() * scalingX, getHeight());
         }
 
         // Set the text color
-        graphics.setColor(getForeground());
+        renderer.color(getForeground());
 
         // Draw shadow if enabled
         if (shadow) {
-            Win4JUI.getDesign().drawTextShadow(graphics, getText(), x, y, getForeground());
+            Win4JUI.getDesign().drawTextShadow(renderer.getJavaGraphics(), getText(), x, y, getForeground());
         }
 
         // Draw the main text
-        graphics.setColor(getForeground()); // Ensure the original color is restored
-        graphics.drawString(text, x, y); // Draw the main text
+        renderer.color(getForeground()); // Ensure the original color is restored
+        renderer.getJavaGraphics().drawString(text, x, y); // Draw the main text
 
         //Draw debug colliders
         drawDebugColliders();

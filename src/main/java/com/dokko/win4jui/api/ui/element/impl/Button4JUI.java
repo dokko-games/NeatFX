@@ -1,6 +1,7 @@
 package com.dokko.win4jui.api.ui.element.impl;
 
 import com.dokko.win4jui.Win4JUI;
+import com.dokko.win4jui.api.render.Renderer2D;
 import com.dokko.win4jui.api.ui.element.Anchors;
 import com.dokko.win4jui.api.ui.element.Element4JUI;
 
@@ -23,18 +24,13 @@ public class Button4JUI extends Element4JUI {
         super(xDistance, yDistance, width, height, anchors);
         panel = new Panel4JUI(xDistance, yDistance, width, height, anchors) {
             @Override
-            protected void doRender(Graphics2D graphics, float x, float y, float width, float height, float scalingX, float scalingY) {
+            protected void doRender(Renderer2D renderer2D, float x, float y, float width, float height, float scalingX, float scalingY) {
                 // Set background color or default to gray
-                graphics.setColor(getBackground());
+                renderer2D.color(getBackground());
 
-                int ix = (int) x;
-                int iy = (int) y;
-                int iw = (int) width;
-                int ih = (int) height;
+                renderer2D.drawRect(x, y, width, height);
 
-                graphics.fillRect(ix, iy, iw, ih);
-
-                Win4JUI.getDesign().decorateButton(graphics, x, y, width, height, scalingX, scalingY, getBackground());
+                Win4JUI.getDesign().decorateButton(renderer2D.getJavaGraphics(), x, y, width, height, scalingX, scalingY, getBackground());
             }
 
             @Override
@@ -50,7 +46,7 @@ public class Button4JUI extends Element4JUI {
     }
 
     @Override
-    protected void doRender(Graphics2D graphics, float x, float y, float width, float height, float scalingX, float scalingY) {
+    protected void doRender(Renderer2D renderer2D, float x, float y, float width, float height, float scalingX, float scalingY) {
 
     }
 

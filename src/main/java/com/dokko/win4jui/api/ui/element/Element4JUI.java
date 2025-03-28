@@ -2,6 +2,7 @@ package com.dokko.win4jui.api.ui.element;
 
 import com.dokko.win4jui.Win4JUI;
 import com.dokko.win4jui.api.error.Error4JUI;
+import com.dokko.win4jui.api.render.Renderer2D;
 import com.dokko.win4jui.api.ui.Input4JUI;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +27,7 @@ public abstract class Element4JUI {
     private float scaleFactorW, scaleFactorH;
     private final ArrayList<Element4JUI> backgroundChildren = new ArrayList<>();
     private final ArrayList<Element4JUI> foregroundChildren = new ArrayList<>();
-    public Graphics2D graphics;
+    public Renderer2D renderer2D;
     private Element4JUI parent;
     public float windowWidth, windowHeight;
     public float windowTargetWidth, windowTargetHeight;
@@ -69,7 +70,7 @@ public abstract class Element4JUI {
     /**
      * Renders the UI element and its children.
      *
-     * @param graphics  Graphics context for rendering.
+     * @param renderer  Graphics context for rendering.
      * @param x         X position (always use getXDistance).
      * @param y         Y position (always use getYDistance).
      * @param width     Width of the element.
@@ -77,7 +78,7 @@ public abstract class Element4JUI {
      * @param scalingX  X scaling factor.
      * @param scalingY  Y scaling factor.
      */
-    public final void render(Graphics2D graphics, float x, float y, float width, float height, float scalingX, float scalingY) {
+    public final void render(Renderer2D renderer, float x, float y, float width, float height, float scalingX, float scalingY) {
         this.scaleFactorW = scalingX;
         this.scaleFactorH = scalingY;
 
@@ -91,11 +92,11 @@ public abstract class Element4JUI {
 
         // Render background children
         for (Element4JUI element : backgroundChildren) {
-            element.render(graphics, element.getXDistance(), element.getYDistance(), element.getWidth(), element.getHeight(), scalingX, scalingY);
+            element.render(renderer, element.getXDistance(), element.getYDistance(), element.getWidth(), element.getHeight(), scalingX, scalingY);
         }
 
-        this.graphics = graphics;
-        doRender(graphics, x, y, width, height, scalingX, scalingY);
+        this.renderer2D = renderer;
+        doRender(renderer, x, y, width, height, scalingX, scalingY);
         preProcessInput(x, y, width, height, scalingX, scalingY);
 
         if (!processedInput) {
@@ -105,7 +106,7 @@ public abstract class Element4JUI {
 
         // Render foreground children
         for (Element4JUI element : foregroundChildren) {
-            element.render(graphics, element.getXDistance(), element.getYDistance(), element.getWidth(), element.getHeight(), scalingX, scalingY);
+            element.render(renderer, element.getXDistance(), element.getYDistance(), element.getWidth(), element.getHeight(), scalingX, scalingY);
         }
     }
     /**
@@ -151,7 +152,7 @@ public abstract class Element4JUI {
     /**
      * Abstract method for rendering. Must be implemented by subclasses.
      */
-    protected abstract void doRender(Graphics2D graphics, float x, float y, float width, float height, float scalingX, float scalingY);
+    protected abstract void doRender(Renderer2D renderer, float x, float y, float width, float height, float scalingX, float scalingY);
     /**
      * Adds an element to the foreground layer (children that will be drawn on top of this element).
      */
@@ -222,8 +223,8 @@ public abstract class Element4JUI {
 
     protected void drawDebugColliders(){
         if(!Win4JUI.SDK_IS_DEBUG)return;
-        graphics.setColor(Color.green);
-        graphics.drawRect((int) getAnchoredXDistance(), (int) getAnchoredYDistance(), (int) getAnchoredWidth(), (int) getAnchoredHeight());
+        renderer2D.color(Color.green);
+        renderer2D.drawRectOutline(getAnchoredXDistance(), getAnchoredYDistance(), getAnchoredWidth(), getAnchoredHeight());
     }
 
     protected void exit(int code){
