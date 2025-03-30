@@ -3,17 +3,20 @@ package com.dokko.win4jui.api.image;
 import com.dokko.win4jui.api.Logger4JUI;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
+import java.util.Arrays;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class Image4JUI {
-    private final byte[] imageData;
-    private final int width, height;
+    private byte[] imageData;
+    private int width, height;
 
     public static Image4JUI fromFile(File path){
         try {
@@ -81,5 +84,9 @@ public class Image4JUI {
             Logger4JUI.error("Failed to create Image4JUI from BufferedImage: %{0}", e.getMessage());
             return null;
         }
+    }
+
+    public Image4JUI copy() {
+        return new Image4JUI(Arrays.copyOf(imageData, imageData.length), width, height);
     }
 }

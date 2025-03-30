@@ -1,19 +1,23 @@
 package com.dokko.win4jui.api.ui.element.impl;
 
 import com.dokko.win4jui.api.image.Image4JUI;
+import com.dokko.win4jui.api.image.ImageFilter4JUI;
 import com.dokko.win4jui.api.render.Renderer2D;
 import com.dokko.win4jui.api.ui.element.Anchors;
 import com.dokko.win4jui.api.ui.element.Element4JUI;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.awt.image.BufferedImage;
 
 @Getter
 @Setter
+@Accessors(chain = true)
 public class ImageRenderer4JUI extends Element4JUI {
     private Image4JUI image;
     private float u, v, textureWidth, textureHeight;
+    private ImageFilter4JUI filter;
 
     /**
      * Constructs a new UI Image Renderer element with the given properties.
@@ -35,8 +39,12 @@ public class ImageRenderer4JUI extends Element4JUI {
         if (image == null) {
             return;
         }
+        Image4JUI renderedImage = image.copy();
+        if(getFilter() != null) {
+            getFilter().process(renderedImage);
+        }
 
-        BufferedImage bufferedImage = image.toBuffer();
+        BufferedImage bufferedImage = renderedImage.toBuffer();
         if (bufferedImage == null) {
             return;
         }
@@ -49,6 +57,6 @@ public class ImageRenderer4JUI extends Element4JUI {
         int srcWidth = (int) (textureWidth * imgWidth);
         int srcHeight = (int) (textureHeight * imgHeight);
 
-        renderer.drawImage(image, x, y, width, height, srcX, srcY, srcX + srcWidth, srcY + srcHeight);
+        renderer.drawImage(renderedImage, x, y, width, height, srcX, srcY, srcX + srcWidth, srcY + srcHeight);
     }
 }
