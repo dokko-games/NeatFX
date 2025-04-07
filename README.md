@@ -23,7 +23,7 @@ window resolutions and input handling or crash handling.
 Java's **_Swing library_** is outdated and confusing for beginners. Other libraries like JavaFX are hard to install
 and finally, **using** more low-level libraries like OpenGL or Vulkan is extremely complicated,
 especially for a programmer that is just getting started with java.<br>
-<br>For That reason, I made **Win4JUI**, a library that takes the good stuff from OpenGL and 
+<br>For that reason, I made **Win4JUI**, a library that takes the good stuff from OpenGL and 
 mixes it with custom features to create the best framework possible.
 ## Installation
 ### For Users
@@ -59,8 +59,9 @@ To make a basic app, you must first make a simple Main class, like in any java p
 int monitorWidth = ; // your screen's width
 int monitorHeight = ; // your screen's height
 Win4JUI.setDeveloperScreenSize(monitorWidth, monitorHeight);
-// If you want to use dark mode:
-Win4JUI.setDesign(new DefaultDarkDesign());
+// If you want to use dark mode add:
+
+//Win4JUI.setDesign(new DefaultDarkDesign());
 
 // Needed for Win4JUI to work
 Win4JUI.initialize();
