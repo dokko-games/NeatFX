@@ -14,22 +14,22 @@ public class Logger4JUI {
     public static int infos, warnings, errors, fatals;
 
     /**
-     * Sends a message if {@link Win4JUI#APP_IS_DEBUG} is true
+     * Sends a message if {@link Win4JUI#isAppDebug()} is true
      * @param format the format of the message. For parameters, input %{n}, where n is the number of the parameter
      * @param parameters the list of parameters of the message
      */
     public static void infoDebug(String format, Object... parameters){
-        if(Win4JUI.APP_IS_DEBUG){
+        if(Win4JUI.isAppDebug()){
             info(format, parameters);
         }
     }
     /**
-     * Sends a message if {@link Win4JUI#APP_IS_DEBUG} is true, but without adding it to the message track
+     * Sends a message if {@link Win4JUI#isAppDebug()} is true, but without adding it to the message track
      * @param format the format of the message. For parameters, input %{n}, where n is the number of the parameter
      * @param parameters the list of parameters of the message
      */
     public static void infoDebugNoCount(String format, Object... parameters){
-        if(Win4JUI.APP_IS_DEBUG){
+        if(Win4JUI.isAppDebug()){
             infoNoCount(format, parameters);
         }
     }
@@ -51,22 +51,22 @@ public class Logger4JUI {
         LOG("info", System.out, format, parameters);
     }
     /**
-     * Sends a warning if {@link Win4JUI#APP_IS_DEBUG} is true
+     * Sends a warning if {@link Win4JUI#isAppDebug()} is true
      * @param format the format of the message. For parameters, input %{n}, where n is the number of the parameter
      * @param parameters the list of parameters of the message
      */
     public static void warnDebug(String format, Object... parameters){
-        if(Win4JUI.APP_IS_DEBUG){
+        if(Win4JUI.isAppDebug()){
             warn(format, parameters);
         }
     }
     /**
-     * Sends a warning if {@link Win4JUI#APP_IS_DEBUG} is true, but without adding it to the message track
+     * Sends a warning if {@link Win4JUI#isAppDebug()} is true, but without adding it to the message track
      * @param format the format of the message. For parameters, input %{n}, where n is the number of the parameter
      * @param parameters the list of parameters of the message
      */
     public static void warnDebugNoCount(String format, Object... parameters){
-        if(Win4JUI.APP_IS_DEBUG){
+        if(Win4JUI.isAppDebug()){
             warnNoCount(format, parameters);
         }
     }
@@ -88,22 +88,22 @@ public class Logger4JUI {
         LOG("warn", System.out, format, parameters);
     }
     /**
-     * Sends an error if {@link Win4JUI#APP_IS_DEBUG} is true
+     * Sends an error if {@link Win4JUI#isAppDebug()} is true
      * @param format the format of the message. For parameters, input %{n}, where n is the number of the parameter
      * @param parameters the list of parameters of the message
      */
     public static void errorDebug(String format, Object... parameters){
-        if(Win4JUI.APP_IS_DEBUG){
+        if(Win4JUI.isAppDebug()){
             error(format, parameters);
         }
     }
     /**
-     * Sends an error if {@link Win4JUI#APP_IS_DEBUG} is true, but without adding it to the message track
+     * Sends an error if {@link Win4JUI#isAppDebug()} is true, but without adding it to the message track
      * @param format the format of the message. For parameters, input %{n}, where n is the number of the parameter
      * @param parameters the list of parameters of the message
      */
     public static void errorDebugNoCount(String format, Object... parameters){
-        if(Win4JUI.APP_IS_DEBUG){
+        if(Win4JUI.isAppDebug()){
             errorNoCount(format, parameters);
         }
     }
@@ -125,22 +125,22 @@ public class Logger4JUI {
         LOG("error", System.err, format, parameters);
     }
     /**
-     * Sends a fatal error if {@link Win4JUI#APP_IS_DEBUG} is true
+     * Sends a fatal error if {@link Win4JUI#isAppDebug()} is true
      * @param format the format of the message. For parameters, input %{n}, where n is the number of the parameter
      * @param parameters the list of parameters of the message
      */
     public static void fatalDebug(String format, Object... parameters){
-        if(Win4JUI.APP_IS_DEBUG){
+        if(Win4JUI.isAppDebug()){
             fatal(format, parameters);
         }
     }
     /**
-     * Sends a fatal error if {@link Win4JUI#APP_IS_DEBUG} is true, but without adding it to the message track
+     * Sends a fatal error if {@link Win4JUI#isAppDebug()} is true, but without adding it to the message track
      * @param format the format of the message. For parameters, input %{n}, where n is the number of the parameter
      * @param parameters the list of parameters of the message
      */
     public static void fatalDebugNoCount(String format, Object... parameters){
-        if(Win4JUI.APP_IS_DEBUG){
+        if(Win4JUI.isAppDebug()){
             fatalNoCount(format, parameters);
         }
     }

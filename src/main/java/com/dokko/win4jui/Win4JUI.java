@@ -2,6 +2,7 @@ package com.dokko.win4jui;
 
 import com.dokko.win4jui.core.window.Anchors;
 import com.dokko.win4jui.core.window.Window;
+import com.dokko.win4jui.engine.argument.Arguments;
 import com.dokko.win4jui.engine.util.design.Design4JUI;
 import com.dokko.win4jui.engine.util.design.impl.DefaultBrightDesign;
 import lombok.Getter;
@@ -30,7 +31,7 @@ public class Win4JUI {
     /**
      * Returns whether the application is in a debug version or not
      */
-    public static boolean APP_IS_DEBUG = false;
+    private static boolean APP_IS_DEBUG = false;
     /**
      * The size of the user's screen
      */
@@ -63,7 +64,7 @@ public class Win4JUI {
     /**
      * Initializes the Win4JUI SDK
      */
-    public static void initialize() {
+    public static void initialize(String[] args) {
         design = new DefaultBrightDesign();
         initialized = true;
         globalParameters = new HashMap<>();
@@ -82,6 +83,16 @@ public class Win4JUI {
             }
         }
         Logger4JUI.infoDebug("%{0} anchors registered", Anchors.values().length);
+        processWin4JUIArguments(args);
+    }
+
+    private static void processWin4JUIArguments(String[] args) {
+        Arguments arguments = new Arguments();
+        arguments.accept("store_fonts"); //Store font sprites.
+        arguments.accept("debug");
+        arguments.parse(args);
+        if(arguments.hasArgument("store_fonts")) globalParameters.put("STORE_FONTS", true);
+        if(arguments.hasArgument("debug")) APP_IS_DEBUG = true;
     }
 
     /**
@@ -115,5 +126,9 @@ public class Win4JUI {
                     , code, Logger4JUI.infos, Logger4JUI.warnings, Logger4JUI.errors, Logger4JUI.fatals);
         }
         System.exit(code);
+    }
+
+    public static boolean isAppDebug() {
+        return APP_IS_DEBUG;
     }
 }

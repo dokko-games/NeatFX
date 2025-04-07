@@ -32,6 +32,10 @@ public class Error {
         this(e.getClass().getSimpleName(), e.getMessage(), cause);
     }
 
+    public static Error from(Exception e) {
+        return new Error(e.getClass().getSimpleName(), e.getMessage(), e.getCause() == null ? "unknown" : e.getCause().getMessage());
+    }
+
     /**
      * Converts the error into an Exception
      * @return the error, as a RuntimeException
