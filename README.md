@@ -21,10 +21,10 @@ window resolutions and input handling or crash handling.
 
 ## Why?
 Java's **_Swing library_** is outdated and confusing for beginners. Other libraries like JavaFX are hard to install
-and finally, more low-level libraries like OpenGL or Vulkan are extremely complicated,
+and finally, **using** more low-level libraries like OpenGL or Vulkan is extremely complicated,
 especially for a programmer that is just getting started with java.<br>
-<br>For That reason, I made **Win4JUI**, a library that takes the good stuff of the most common UI methods in the language and 
-mixes them to create the best framework possible.
+<br>For That reason, I made **Win4JUI**, a library that takes the good stuff from OpenGL and 
+mixes it with custom features to create the best framework possible.
 ## Installation
 ### For Users
 Go into [Releases](https://github.com/dokko-games/WinForJUI/releases) and select the version you want.
@@ -44,7 +44,7 @@ If you don't want to open it from your terminal just open the created folder Win
 It is recommended to use **IntelliJ Idea** when working **on** the project.
 ## Requirements:
 ##### Already installed:
-- FlatLaf
+- LWJGL
 - Lombok
 ##### Requires installation:
 - Intellij Lombok plugin
@@ -59,14 +59,24 @@ To make a basic app, you must first make a simple Main class, like in any java p
 int monitorWidth = ; // your screen's width
 int monitorHeight = ; // your screen's height
 Win4JUI.setDeveloperScreenSize(monitorWidth, monitorHeight);
+// If you want to use dark mode:
+Win4JUI.setDesign(new DefaultDarkDesign());
+
+// Needed for Win4JUI to work
 Win4JUI.initialize();
 
 String windowTitle = ; // the window's title
 int windowWidth = ; // the window's width
 int windowHeight = ; // the window's height
-int windowFramerate = ; // the amount of times the window will refresh every second. Use 15-60 normally
-Window4JUI window = new Window4JUI(windowTitle, windowWidth, windowHeight, windowFramerate);
-window.setVisible(true);
+Window window = new Window(windowTitle, windowWidth, windowHeight);
+
+// To add any elements:
+Panel panel = new Panel(0, 0, 100, 100, Anchors.CENTERED_SCALE);
+window.add(panel);
+
+window.renderLoop(); // Start rendering the window
+window.cleanUp(); // After closing it, free all memory allocated by OpenGL
+Win4JUI.exit(0); // This line is very important, ALWAYS include it in your program
 ```
 ## 🤝 Contributing to the project
 Contributions are welcome! If you have any suggestions or bug reports feel free to create a new [Issue](https://github.com/dokko-games/WinForJUI/issues)
