@@ -1,5 +1,6 @@
 package com.dokko.win4jui.engine.argument;
 
+import com.dokko.win4jui.core.error.Error;
 import lombok.ToString;
 
 import java.util.HashMap;
@@ -75,14 +76,14 @@ public class Arguments {
     }
 
     // Parse the arguments from an array of strings (simulating command line args)
-    public void parse(String[] args) throws IllegalArgumentException {
+    public void parse(String[] args) {
         for (int i = 0; i < args.length; i++) {
             String argName = args[i];
             if (argName.startsWith("--")) {
                 argName = argName.substring(2); // Remove the leading '--'
                 Argument<?> argument = arguments.get(argName);
                 if (argument == null) {
-                    throw new IllegalArgumentException("Unknown argument: " + argName);
+                    throw Error.from(new IllegalArgumentException("Unknown argument: " + argName)).getException();
                 }
 
                 parsedArguments.add(argName); // Mark this argument as parsed
@@ -94,7 +95,7 @@ public class Arguments {
                         setArgumentValue(argument, valueStr);
                         i++; // Skip the next argument since it was the value for this one
                     } else {
-                        throw new IllegalArgumentException("Argument --" + argName + " requires a value.");
+                        throw Error.from(new IllegalArgumentException("Argument --" + argName + " requires a value.")).getException();
                     }
                 }
             }
@@ -103,7 +104,7 @@ public class Arguments {
         // Check for required arguments that were not provided
         for (Argument<?> requiredArg : requiredArguments.values()) {
             if (requiredArg.hasValue() && requiredArg.getValue() == null) {
-                throw new IllegalArgumentException("Missing required argument: --" + requiredArg.getName());
+                throw Error.from(new IllegalArgumentException("Missing required argument: --" + requiredArg.getName())).getException();
             }
         }
     }
@@ -112,12 +113,22 @@ public class Arguments {
         // Use the argument type to properly cast the value to the correct type
         if (argument.getType() == String.class) {
             argument.setValue(valueStr);
+        } else if (argument.getType() == Byte.class) {
+            argument.setValue(Byte.valueOf(valueStr));
+        } else if (argument.getType() == Short.class) {
+            argument.setValue(Short.valueOf(valueStr));
         } else if (argument.getType() == Integer.class) {
             argument.setValue(Integer.valueOf(valueStr));
+        } else if (argument.getType() == Long.class) {
+            argument.setValue(Long.valueOf(valueStr));
+        } else if (argument.getType() == Float.class) {
+            argument.setValue(Float.valueOf(valueStr));
+        } else if (argument.getType() == Double.class) {
+            argument.setValue(Double.valueOf(valueStr));
         } else if (argument.getType() == Boolean.class) {
             argument.setValue(Boolean.valueOf(valueStr));
         } else {
-            throw new IllegalArgumentException("Unsupported argument type: " + argument.getType().getName());
+            throw Error.from(new IllegalArgumentException("Unsupported argument type: " + argument.getType().getName())).getException();
         }
     }
 
