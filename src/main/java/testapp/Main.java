@@ -1,15 +1,15 @@
 package testapp;
 
-import com.dokko.win4jui.Win4JUI;
-import com.dokko.win4jui.Logger4JUI;
-import com.dokko.win4jui.core.Input;
-import com.dokko.win4jui.core.window.Anchors;
-import com.dokko.win4jui.core.window.Window;
-import com.dokko.win4jui.core.window.element.impl.advanced.ImageRenderer;
-import com.dokko.win4jui.core.window.element.impl.basic.Button;
-import com.dokko.win4jui.core.window.element.impl.basic.Panel;
-import com.dokko.win4jui.core.window.element.impl.basic.Text;
-import com.dokko.win4jui.engine.render.texture.Texture;
+import com.dokko.neatfx.NeatFX;
+import com.dokko.neatfx.NeatLogger;
+import com.dokko.neatfx.core.Input;
+import com.dokko.neatfx.core.window.Anchors;
+import com.dokko.neatfx.core.window.Window;
+import com.dokko.neatfx.core.window.element.impl.advanced.ImageRenderer;
+import com.dokko.neatfx.core.window.element.impl.basic.Button;
+import com.dokko.neatfx.core.window.element.impl.basic.Panel;
+import com.dokko.neatfx.core.window.element.impl.basic.Text;
+import com.dokko.neatfx.engine.render.texture.Texture;
 import org.lwjgl.glfw.GLFW;
 
 
@@ -18,36 +18,36 @@ public class Main {
         try {
             newEngine(args);
         } catch (Exception e) {
-            Logger4JUI.fatal("%{0}", e.getClass().getSimpleName());
-            Logger4JUI.fatalNoCount("%{0}", e.getMessage());
-            Logger4JUI.fatalNoCount("%{0}", e.getStackTrace()[0]);
-            Win4JUI.exit(-1);
+            NeatLogger.fatal("%{0}", e.getClass().getSimpleName());
+            NeatLogger.fatalNoCount("%{0}", e.getMessage());
+            NeatLogger.fatalNoCount("%{0}", e.getStackTrace()[0]);
+            NeatFX.exit(-1);
         }
     }
 
     private static void newEngine(String[] args) {
-        Win4JUI.setDeveloperScreenSize(1920, 1080);
-        Win4JUI.initialize(args);
+        NeatFX.setDeveloperScreenSize(1920, 1080);
+        NeatFX.initialize(args);
         Window wr = new Window("Test App", 1100, 800);
-        Win4JUI.runOnShutdown.add(() -> {
-            if(wr.isClosing()) Logger4JUI.warn("Window Closed Manually.");
-            else Logger4JUI.warn("Window Closed Automatically.");
+        NeatFX.runOnShutdown.add(() -> {
+            if(wr.isClosing()) NeatLogger.warn("Window Closed Manually.");
+            else NeatLogger.warn("Window Closed Automatically.");
         });
         Panel left = new Panel(5, 5, 300, 790, Anchors.TOP_LEFT_SCALE.xy(false, true));
-        left.addForeground(new Text("#{5CEAFF}Win4JUI #{FFFFFF}Test Application", 4, 4, 0, 0, Anchors.SCALE_TOP_CENTER)
+        left.addForeground(new Text("#{5CEAFF}NeatFX #{FFFFFF}Test Application", 4, 4, 0, 0, Anchors.SCALE_TOP_CENTER)
                 .setShadow(true));
         Button b = new Button("Exit without closing", 0, 20, 0, 0, Anchors.BOTTOM_CENTER){
             @Override
             public void onInput(float x, float y, float w, float h, float sw, float sh) {
                 if(Input.wasButtonJustReleased(GLFW.GLFW_MOUSE_BUTTON_1)){
-                    Win4JUI.exit(0);
+                    NeatFX.exit(0);
                 }
             }
         };
         left.addForeground(b);
         wr.add(left);
         Panel right = new Panel(5, 5, 300, 790, Anchors.TOP_RIGHT_SCALE.xy(false, true));
-        right.addForeground(new Text(Win4JUI.SDK_VERSION, 7, 4, 0, 0, Anchors.SCALE_BOTTOM_RIGHT)
+        right.addForeground(new Text(NeatFX.LIB_VERSION, 7, 4, 0, 0, Anchors.SCALE_BOTTOM_RIGHT)
                 .setShadow(true));
         wr.add(right);
         int[] smileyFace = generateSmileyFace();
@@ -55,7 +55,7 @@ public class Main {
         wr.add(imageRenderer);
         wr.renderLoop();
         wr.cleanUp();
-        Win4JUI.exit(0);
+        NeatFX.exit(0);
     }
 
     private static int[] generateSmileyFace() {
