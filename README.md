@@ -32,15 +32,15 @@ After you choose a version, go under assets and select <i>NeatFX.jar</i>
 ### For developers
 1. **Clone the repository**
 ```bash
-git clone https://github.com/dokko-games/WinForJUI.git
+git clone https://github.com/dokko-games/NeatFX.git
 ```
 2. **Navigate to the generated folder**
 ```bash 
-cd WinForJUI
+cd NeatFX
 ```
 
 After doing this, open your IDE **from your terminal,** and it will automatically open the repository as a workspace.
-If you don't want to open it from your terminal just open the created folder WinForJUI on your code editor.
+If you don't want to open it from your terminal just open the created folder NeatFX on your code editor.
 It is recommended to use **IntelliJ Idea** when working **on** the project.
 ## Requirements:
 ##### Already installed:
@@ -83,4 +83,4 @@ NeatFX.exit(0); // This line is very important, ALWAYS include it in your progra
 Contributions are welcome! If you have any suggestions or bug reports feel free to create a new [Issue](https://github.com/dokko-games/WinForJUI/issues)
 or [Pull Request](https://github.com/dokko-games/WinForJUI/pulls)
 ## License
-WinForJUI is licensed under the license <i>LGPL-2.1</i>. See the [LICENSE](LICENSE) file for details.
+NeatFX is licensed under the license <i>LGPL-2.1</i>. See the [LICENSE](LICENSE) file for details.
