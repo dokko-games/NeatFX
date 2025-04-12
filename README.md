@@ -1,5 +1,5 @@
-# WinForJUI
-WinForJUI is a library that makes working with visual interfaces on java easier, by removing the
+# NeatFX
+NeatFX is a library that makes working with visual interfaces on java easier, by removing the
 use of java's default library **_swing_** and having to prepare your applications for different
 window resolutions and input handling or crash handling.
 
@@ -11,7 +11,7 @@ window resolutions and input handling or crash handling.
 ![License](https://img.shields.io/github/license/dokko-games/WinForJUI)
 
 ## Quick Access
-- [Why Use Win4JUI](#why)
+- [Why Use NeatFX](#why)
 - [Installation](#installation)
 - - [Requirements](#requirements)
 - [Features](#features)
@@ -23,12 +23,12 @@ window resolutions and input handling or crash handling.
 Java's **_Swing library_** is outdated and confusing for beginners. Other libraries like JavaFX are hard to install
 and finally, **using** more low-level libraries like OpenGL or Vulkan is extremely complicated,
 especially for a programmer that is just getting started with java.<br>
-<br>For that reason, I made **Win4JUI**, a library that takes the good stuff from OpenGL and 
+<br>For that reason, I made **NeatFX**, a library that takes the good stuff from OpenGL and 
 mixes it with custom features to create the best framework possible.
 ## Installation
 ### For Users
 Go into [Releases](https://github.com/dokko-games/WinForJUI/releases) and select the version you want.
-After you choose a version, go under assets and select <i>WinForJUI.jar</i>
+After you choose a version, go under assets and select <i>NeatFX.jar</i>
 ### For developers
 1. **Clone the repository**
 ```bash
@@ -58,13 +58,13 @@ To make a basic app, you must first make a simple Main class, like in any java p
 ```java
 int monitorWidth = ; // your screen's width
 int monitorHeight = ; // your screen's height
-Win4JUI.setDeveloperScreenSize(monitorWidth, monitorHeight);
+NeatFX.setDeveloperScreenSize(monitorWidth, monitorHeight);
 // If you want to use dark mode add:
 
-//Win4JUI.setDesign(new DefaultDarkDesign());
+//NeatFX.setDesign(new DefaultDarkDesign());
 
-// Needed for Win4JUI to work
-Win4JUI.initialize();
+// Needed for NeatFX to work
+NeatFX.initialize();
 
 String windowTitle = ; // the window's title
 int windowWidth = ; // the window's width
@@ -77,7 +77,7 @@ window.add(panel);
 
 window.renderLoop(); // Start rendering the window
 window.cleanUp(); // After closing it, free all memory allocated by OpenGL
-Win4JUI.exit(0); // This line is very important, ALWAYS include it in your program
+NeatFX.exit(0); // This line is very important, ALWAYS include it in your program
 ```
 ## 🤝 Contributing to the project
 Contributions are welcome! If you have any suggestions or bug reports feel free to create a new [Issue](https://github.com/dokko-games/WinForJUI/issues)
