@@ -10,6 +10,31 @@ import java.util.Set;
 
 @ToString
 public class Arguments {
+    /**
+     * When active, unknown arguments will be ignored
+     */
+    public static final int MODE_IGNORE = 3;
+    /**
+     * When active, you will have to handle each unknown argument. Do it by overriding {@link Arguments#handleArgument(String)}
+     */
+    public static final int MODE_HANDLE = 4;
+    /**
+     * When active, an error will be thrown if an unknown argument is encountered
+     */
+    public static final int MODE_ERROR = 5;
+    private final int mode;
+    /**
+     * Constructs a new Arguments class
+     * @param mode the mode to use when it encounters an unknown argument
+     * @see Arguments#MODE_IGNORE
+     * @see Arguments#MODE_HANDLE
+     * @see Arguments#MODE_ERROR
+     */
+    public Arguments(int mode) {
+        mode = Math.max(Math.min(MODE_ERROR, mode), MODE_IGNORE);
+        this.mode = mode;
+    }
+
     private final Map<String, Argument<?>> arguments = new HashMap<>();
     private final Map<String, Argument<?>> requiredArguments = new HashMap<>(); // For tracking required arguments
     private final Set<String> parsedArguments = new HashSet<>(); // Track parsed arguments
@@ -93,7 +118,13 @@ public class Arguments {
                 String canonicalName = aliases.getOrDefault(argName, argName);
                 Argument<?> argument = arguments.get(canonicalName);
                 if (argument == null) {
-                    throw Error.from(new IllegalArgumentException("Unknown argument: " + canonicalName)).getException();
+                    if(mode == MODE_ERROR){
+                        throw Error.from(new IllegalArgumentException("Unknown argument: " + canonicalName)).getException();
+                    } else if (mode == MODE_HANDLE){
+                        handleArgument(canonicalName);
+                    } else if (mode == MODE_IGNORE) {
+                        continue;
+                    }
                 }
 
                 parsedArguments.add(canonicalName); // Mark this argument as parsed
@@ -117,6 +148,14 @@ public class Arguments {
                 throw Error.from(new IllegalArgumentException("Missing required argument: --" + requiredArg.getName())).getException();
             }
         }
+    }
+
+    /**
+     * Handles an unknown argument
+     * @param name the name of the argument
+     */
+    private void handleArgument(String name) {
+
     }
 
     private void setArgumentValue(Argument<?> argument, String valueStr) {

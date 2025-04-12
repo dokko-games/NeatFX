@@ -87,7 +87,7 @@ public class NeatFX {
     }
 
     private static void processLibraryArguments(String[] args) {
-        Arguments arguments = new Arguments();
+        Arguments arguments = new Arguments(Arguments.MODE_IGNORE);
         arguments.accept("store_fonts"); //Store font sprites.
         arguments.addAlias("store_fonts", "sf");
         arguments.accept("debug");
