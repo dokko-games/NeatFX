@@ -1,6 +1,7 @@
 package com.dokko.neatfx;
 
 import com.dokko.neatfx.core.error.Error;
+import com.dokko.neatfx.engine.util.NeatFiles;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -190,10 +191,17 @@ public class NeatLogger {
     }
 
     public static void writeFile() {
+        Calendar c = Calendar.getInstance();
+        File todayFile = new File(NeatFX.getFilePath("logs", String.format("%02d", c.get(Calendar.DAY_OF_MONTH)) + "_" + String.format("%02d", c.get(Calendar.MONTH)) + "_" + c.get(Calendar.YEAR)
+                + "_" + String.format("%02d", c.get(Calendar.HOUR_OF_DAY)) + "_" + String.format("%02d", c.get(Calendar.MINUTE)) + "_" + String.format("%02d", c.get(Calendar.SECOND)), "log"));
+        long size = NeatFiles.size(todayFile.getParentFile().toPath());
+        if(size > 5000000000L){
+            int dataI = (int)(size / 10000000L);
+            float dataF = (float)dataI / 100;
+            NeatLogger.warn("More than 5GB of logs found (%{0}GB). Clearing all log data", dataF);
+            NeatFiles.delete(todayFile.getParentFile());
+        }
         try {
-            Calendar c = Calendar.getInstance();
-            File todayFile = new File(NeatFX.getFilePath("logs", String.format("%02d", c.get(Calendar.DAY_OF_MONTH)) + "_" + String.format("%02d", c.get(Calendar.MONTH)) + "_" + c.get(Calendar.YEAR)
-                    + "_" + String.format("%02d", c.get(Calendar.HOUR_OF_DAY)) + "_" + String.format("%02d", c.get(Calendar.MINUTE)) + "_" + String.format("%02d", c.get(Calendar.SECOND)), "log"));
             todayFile.getParentFile().mkdirs();
             Files.writeString(todayFile.toPath(), loggerString.toString());
         }catch (Exception e){
