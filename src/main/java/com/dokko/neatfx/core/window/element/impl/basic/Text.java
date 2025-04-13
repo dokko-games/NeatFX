@@ -33,6 +33,10 @@ public class Text extends Element {
      * Whether the text has a shadow or not
      */
     private boolean shadow;
+    /**
+     * Whether the text is scaled
+     */
+    private boolean scaled = false;
 
     public Text(String text, float x, float y, float maxWidth, float maxHeight, Anchors anchors) {
         super(x, y, 0, 0, anchors.removeScaling());
@@ -45,12 +49,13 @@ public class Text extends Element {
         setForeground(Color4.WHITE);
         setBackground(Color4.NONE);
         if(getFont().getFontOffset() == 0)getFont().setFontOffset(4);
+        scaled = false;
     }
 
     @Override
     protected void doRender(float scalingFactorW, float scalingFactorH) {
-        setWidth(Math.min(maxWidth, getFont().getWidth(text)));
-        setHeight(Math.min(maxHeight, getFont().getHeight(text)));
+        setWidth(Math.min(maxWidth, getFont().getWidth(text, scaled)));
+        setHeight(Math.min(maxHeight, getFont().getHeight(text, scaled)));
         renderBackground();
         font.darken = true;
         font.darkenLayers = 3;
@@ -71,14 +76,14 @@ public class Text extends Element {
         Renderer.color(getForeground().darker(3)); // Semi-transparent black shadow
         GL11.glPushMatrix();
         GL11.glTranslatef(-shadowOffset, shadowOffset, 0);
-        getFont().drawString(text, 0, 0, maxWidth, maxHeight);
+        getFont().drawString(text, 0, 0, maxWidth, maxHeight, scaled, scaled);
         GL11.glPopMatrix();
     }
 
     private void renderText() {
         if (text == null || text.isEmpty()) return;
         Renderer.color(getForeground());
-        getFont().drawString(text, 0, 0, maxWidth, maxHeight);
+        getFont().drawString(text, 0, 0, maxWidth, maxHeight, scaled, scaled);
     }
 
     @Override

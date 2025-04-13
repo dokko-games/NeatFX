@@ -43,6 +43,14 @@ public abstract class Element {
      */
     private float height;
     /**
+     * The default width of the element, when it is not being scaled
+     */
+    private float defaultWidth;
+    /**
+     * The default height of the element, when it is not being scaled
+     */
+    private float defaultHeight;
+    /**
      * The anchored X position of the element, relative to the top left of the screen
      */
     private float anchoredX;
@@ -118,7 +126,9 @@ public abstract class Element {
         setX(x);
         setY(y);
         setWidth(width);
+        setDefaultWidth(width);
         setHeight(height);
+        setDefaultHeight(height);
         setAnchors(anchors);
         backgroundChildren = new ArrayList<>();
         foregroundChildren = new ArrayList<>();

@@ -1,12 +1,19 @@
 package com.dokko.neatfx;
 
+import com.dokko.neatfx.core.error.Error;
+
+import java.io.File;
 import java.io.PrintStream;
+import java.nio.file.Files;
 import java.util.Calendar;
 
 /**
  * Utility class for logging
  */
 public class NeatLogger {
+
+    private static final StringBuilder loggerString = new StringBuilder();
+
     private static final String PREFIX = NeatFX.LIB_VERSION;
     /**
      * The amount of messages sent in each category
@@ -164,10 +171,14 @@ public class NeatLogger {
 
     private static void LOG(String logger, PrintStream printStream, String format, Object[] parameters){
         String message = FORMAT_MESSAGE(format, parameters);
-        Calendar c = Calendar.getInstance();
-        String prfix = " (" + String.format("%02d", c.get(Calendar.DAY_OF_MONTH)) + "/" + String.format("%02d", c.get(Calendar.MONTH)) + "/" + c.get(Calendar.YEAR)
-                + " " + String.format("%02d", c.get(Calendar.HOUR_OF_DAY)) + ":" + String.format("%02d", c.get(Calendar.MINUTE)) + ":" + String.format("%02d", c.get(Calendar.SECOND)) + ")";
-        printStream.println("["+PREFIX+"/"+logger.toUpperCase()+prfix+"]: "+message);
+        for(String line : message.split("\n")){
+            Calendar c = Calendar.getInstance();
+            String prfix = " (" + String.format("%02d", c.get(Calendar.DAY_OF_MONTH)) + "/" + String.format("%02d", c.get(Calendar.MONTH)) + "/" + c.get(Calendar.YEAR)
+                    + " " + String.format("%02d", c.get(Calendar.HOUR_OF_DAY)) + ":" + String.format("%02d", c.get(Calendar.MINUTE)) + ":" + String.format("%02d", c.get(Calendar.SECOND)) + ")";
+            printStream.println("["+PREFIX+"/"+logger.toUpperCase()+prfix+"]: "+line);
+            loggerString.append("[" + PREFIX + "/").append(logger.toUpperCase()).append(prfix).append("]: ").append(line);
+            loggerString.append("\n");
+        }
     }
 
     private static String FORMAT_MESSAGE(String format, Object[] parameters) {
@@ -176,5 +187,17 @@ public class NeatLogger {
             result = result.replace("%{"+i+"}", parameters[i].toString());
         }
         return result;
+    }
+
+    public static void writeFile() {
+        try {
+            Calendar c = Calendar.getInstance();
+            File todayFile = new File(NeatFX.getFilePath("logs", String.format("%02d", c.get(Calendar.DAY_OF_MONTH)) + "_" + String.format("%02d", c.get(Calendar.MONTH)) + "_" + c.get(Calendar.YEAR)
+                    + "_" + String.format("%02d", c.get(Calendar.HOUR_OF_DAY)) + "_" + String.format("%02d", c.get(Calendar.MINUTE)) + "_" + String.format("%02d", c.get(Calendar.SECOND)), "log"));
+            todayFile.getParentFile().mkdirs();
+            Files.writeString(todayFile.toPath(), loggerString.toString());
+        }catch (Exception e){
+            throw Error.from(e).getException();
+        }
     }
 }

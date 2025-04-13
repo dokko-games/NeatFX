@@ -1,4 +1,4 @@
-package testapp;
+package impl.dokko;
 
 import com.dokko.neatfx.NeatFX;
 import com.dokko.neatfx.NeatLogger;
@@ -12,14 +12,14 @@ import com.dokko.neatfx.core.window.element.impl.basic.Text;
 import com.dokko.neatfx.engine.render.texture.Texture;
 import org.lwjgl.glfw.GLFW;
 
-
 public class Main {
     public static void main(String[] args) {
         try {
-            newEngine(args);
+            //newEngine(args);
+            SimpleApp app = new SimpleApp();
+            app.run(args);
         } catch (Exception e) {
-            NeatLogger.fatal("%{0}", e.getClass().getSimpleName());
-            NeatLogger.fatalNoCount("%{0}", e.getMessage());
+            NeatLogger.fatal("%{0}", e.getMessage());
             NeatLogger.fatalNoCount("%{0}", e.getStackTrace()[0]);
             NeatFX.exit(-1);
         }

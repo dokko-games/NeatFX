@@ -16,6 +16,9 @@ public class Renderer {
     @Getter
     @Setter
     private static int windowWidth, windowHeight;
+    @Getter
+    @Setter
+    private static float scaleX, scaleY;
     /**
      * Draws a rectangle
      * @param x the X position (left)

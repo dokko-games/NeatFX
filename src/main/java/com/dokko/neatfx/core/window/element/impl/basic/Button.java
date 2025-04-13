@@ -21,10 +21,10 @@ public class Button extends Element {
         Text tex = new Text(text, 0, 0, 0, 0, Anchors.CENTERED).setShadow(true);
         addForeground(tex);
         if(width == 0){
-            setWidth(tex.getFont().getWidth(text) + 15);
+            setWidth(tex.getFont().getWidth(text, anchors.isWidthScaled() && anchors.isHeightScaled()) + 15);
         }
         if(height == 0){
-            setHeight(tex.getFont().getHeight(text) + 10);
+            setHeight(tex.getFont().getHeight(text, anchors.isWidthScaled() && anchors.isHeightScaled()) + 10);
         }
     }
 

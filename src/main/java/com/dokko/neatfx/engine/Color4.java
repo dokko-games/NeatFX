@@ -1,5 +1,6 @@
 package com.dokko.neatfx.engine;
 
+import com.dokko.neatfx.engine.render.Renderer;
 import lombok.Getter;
 
 import java.awt.*;
@@ -209,5 +210,9 @@ public class Color4 {
                 ", blue=" + blue +
                 ", alpha=" + alpha +
                 '}';
+    }
+
+    public void bind() {
+        Renderer.color(this);
     }
 }

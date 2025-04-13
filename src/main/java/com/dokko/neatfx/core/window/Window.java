@@ -256,6 +256,8 @@ public class Window {
         content.setX(0).setY(0).setWidth(getSize().width).setHeight(getSize().height);
         Renderer.setWindowWidth(getSize().width);
         Renderer.setWindowHeight(getSize().height);
+        Renderer.setScaleX(scalingFactorW);
+        Renderer.setScaleY(scalingFactorH);
         content.render(content.getX(), content.getY(), content.getWidth(), content.getHeight(), scalingFactorW, scalingFactorH);
         content.input();
     }

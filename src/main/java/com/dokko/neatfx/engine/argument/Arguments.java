@@ -136,7 +136,7 @@ public class Arguments {
                         setArgumentValue(argument, valueStr);
                         i++; // Skip the next argument since it was the value for this one
                     } else {
-                        throw Error.from(new IllegalArgumentException("Argument --" + argName + " requires a value.")).getException();
+                        throw Error.from(new IllegalArgumentException("Argument --" + argName + " requires a value")).getException();
                     }
                 }
             }
@@ -144,7 +144,7 @@ public class Arguments {
 
         // Check for required arguments that were not provided
         for (Argument<?> requiredArg : requiredArguments.values()) {
-            if (requiredArg.hasValue() && requiredArg.getValue() == null) {
+            if ((requiredArg.hasValue() && requiredArg.getValue() == null) || !parsedArguments.contains(requiredArg.getName())) {
                 throw Error.from(new IllegalArgumentException("Missing required argument: --" + requiredArg.getName())).getException();
             }
         }

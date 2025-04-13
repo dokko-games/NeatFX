@@ -23,6 +23,7 @@ public class NeatFX {
      * The version of the library
      */
     public static final String LIB_VERSION = LIB_NAME + " b0.01";
+    public static String HOME_PATH = System.getProperty("user.home")+"/"+LIB_NAME.toLowerCase();
     /**
      * Returns whether the application is in a debug version or not
      */
@@ -115,10 +116,12 @@ public class NeatFX {
      * @param code the exit code. Make it be negative if there was an error
      */
     public static void exit(int code){
-        for(Window window : Window.registeredWindows) {
-            window.cleanUp();
+        if(Window.registeredWindows != null){
+            for(Window window : Window.registeredWindows) {
+                window.cleanUp();
+            }
+            Window.registeredWindows.clear();
         }
-        Window.registeredWindows.clear();
         runOnShutdown.forEach(Runnable::run);
         if(code < 0){
             NeatLogger.error("Exited app with exit code '%{0}': %{1} messages, %{2} warnings, %{3} errors and %{4} critical errors"
@@ -127,10 +130,15 @@ public class NeatFX {
             NeatLogger.info("Exited app with exit code '%{0}': %{1} messages, %{2} warnings, %{3} errors and %{4} critical errors"
                     , code, NeatLogger.infos, NeatLogger.warnings, NeatLogger.errors, NeatLogger.fatals);
         }
+        NeatLogger.writeFile();
         System.exit(code);
     }
 
     public static boolean isAppDebug() {
         return APP_IS_DEBUG;
+    }
+
+    public static String getFilePath(String folder, String fileName, String extension) {
+        return HOME_PATH+"/"+folder+"/"+fileName+"."+extension;
     }
 }

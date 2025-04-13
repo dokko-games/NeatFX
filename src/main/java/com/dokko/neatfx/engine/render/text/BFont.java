@@ -11,6 +11,7 @@ import com.dokko.neatfx.engine.render.texture.Texture;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
 import java.awt.*;
@@ -71,6 +72,15 @@ public class BFont {
 
     private final File fontFile;
     private final Texture texture;
+
+    /**
+     * Constructs a new antialiased font from a java font
+     * @param name the name of the AWT font
+     * @param size the size of the font
+     */
+    public BFont(String name, int size) {
+        this(new Font(name, PLAIN, size), true);
+    }
 
     /**
      * Constructs a new antialiased monospace font with size 16
@@ -160,7 +170,7 @@ public class BFont {
         }
         setFontSize(font.getSize());
         setFontStyle(font.getStyle());
-        fontFile = new File(System.getProperty("user.home")+"/"+NeatFX.LIB_NAME.toLowerCase()+"/fonts/"+getFontName()+"_"+str(font.getStyle())+"_"+font.getSize()+".fontmeta");
+        fontFile = new File(NeatFX.getFilePath("fonts", getFontName()+"_"+str(font.getStyle())+"_"+font.getSize(), "fontmeta"));
         texture = createFontTexture(font, antiAlias);
         if (!checkFontExists()) {
             this.fontMeta = new FontMeta(FontMeta.META_VERSION, font.getFontName().replace(" ",""),
@@ -433,9 +443,10 @@ public class BFont {
     /**
      * Gets the width of a text, ignoring color codes
      * @param text the text
+     * @param scale whether the text is scaled
      * @return the width
      */
-    public int getWidth(CharSequence text) {
+    public int getWidth(CharSequence text, boolean scale) {
         int width = 0;
         int lineWidth = 0;
         for (int i = 0; i < text.length(); i++) {
@@ -461,14 +472,15 @@ public class BFont {
             lineWidth += g.getWidth();
         }
         width = Math.max(width, lineWidth);
-        return width;
+        return (int) (width * (scale ? Renderer.getScaleX() : 1));
     }
     /**
      * Gets the height of a text, ignoring color codes
      * @param text the text
+     * @param scale whether the text is scaled
      * @return the height
      */
-    public int getHeight(CharSequence text) {
+    public int getHeight(CharSequence text, boolean scale) {
         int height = 0;
         int lineHeight = 0;
         for (int i = 0; i < text.length(); i++) {
@@ -491,7 +503,7 @@ public class BFont {
             lineHeight = Math.max(lineHeight, g.getHeight());
         }
         height += lineHeight;
-        return height;
+        return (int) (height * (scale ? Renderer.getScaleY() : 1));
     }
 
     /**
@@ -508,9 +520,11 @@ public class BFont {
      * @param text the text to draw
      * @param x the X position of the string
      * @param y the Y position of the string
+     * @param scaleX whether the text should be scaled horizontally
+     * @param scaleY whether the text should be scaled vertically
      */
-    public void drawString(CharSequence text, float x, float y) {
-        drawString(text, x, y, Float.MAX_VALUE, Float.MAX_VALUE);
+    public void drawString(CharSequence text, float x, float y, boolean scaleX, boolean scaleY) {
+        drawString(text, x, y, Float.MAX_VALUE, Float.MAX_VALUE, scaleX, scaleY);
     }
 
     /**
@@ -520,15 +534,24 @@ public class BFont {
      * @param y the Y position of the string
      * @param maxWidth the maximum width of each line. Will wrap to a new line if exceeded. Put 0 for no limit
      * @param maxHeight the maximum height of the text. Will stop rendering if exceeded Put 0 for no limit
+     * @param scaleX whether the text should be scaled horizontally
+     * @param scaleY whether the text should be scaled vertically
      */
-    public void drawString(CharSequence text, float x, float y, float maxWidth, float maxHeight) {
+    public void drawString(CharSequence text, float x, float y, float maxWidth, float maxHeight, boolean scaleX, boolean scaleY) {
+        fontHeight = getHeight("A", scaleY) - 10;
+        GL11.glPushMatrix();
+        GL11.glTranslatef(x, y, 0);
         if(maxWidth == 0) maxWidth = Float.MAX_VALUE;
         if(maxHeight == 0) maxHeight = Float.MAX_VALUE;
 
         Color4 color4 = Renderer.getColor();
 
-        float drawX = x;
-        float drawY = y;
+        float drawX = 0;
+        float drawY = 0;
+        float facX = Renderer.getScaleX();
+        float facY = Renderer.getScaleY();
+        if(!scaleX) facX = 1;
+        if(!scaleY) facY = 1;
 
         texture.bind();
 
@@ -555,7 +578,7 @@ public class BFont {
             if (ch == '\n') {
                 // Line feed, reset x and y for the next line
                 drawY += fontHeight + fontOffset;
-                drawX = x;
+                drawX = 0;
                 continue;
             }
 
@@ -567,8 +590,8 @@ public class BFont {
             Glyph g = glyphs.get(ch);
 
             // Check if the text exceeds the maximum width
-            if (drawX + g.getWidth() > x + maxWidth) {
-                drawX = x;  // Move to the next line
+            if (drawX + g.getWidth() > maxWidth) {
+                drawX = 0;  // Move to the next line
                 drawY += fontHeight + fontOffset;
             }
 
@@ -579,14 +602,16 @@ public class BFont {
             }
 
             // Draw the character
-            Renderer.drawTexturedRect(drawX, drawY, g.getWidth(), g.getHeight(), g.getX(), g.getY(),
-                    g.getX() + g.getWidth(), g.getY() + g.getHeight(), g.getWidth(), g.getHeight(), texture);
+            Renderer.drawTexturedRect(drawX, drawY, g.getWidth() * facX, g.getHeight() * facY,
+                    g.getX(), g.getY(), g.getX() + g.getWidth(), g.getY() + g.getHeight(), g.getWidth() * facX,
+                    g.getHeight() * facY, texture);
 
-            drawX += g.getWidth();
+            drawX += g.getWidth() * facX;
         }
         Renderer.color(color4);
 
         texture.unbind();
+        GL11.glPopMatrix();
     }
 
     /**
@@ -615,4 +640,17 @@ public class BFont {
         return new float[]{r / 255f, g / 255f, b / 255f, 1.0f};
     }
 
+    /**
+     * Draws a string in the center of a rectangle
+     * @param text the text to draw
+     * @param x the x position of the rectangle
+     * @param y the y position of the rectangle
+     * @param width the width of the rectangle
+     * @param height the height of the rectangle
+     * @param scaleX whether the text is scaled horizontally
+     * @param scaleY whether the text is scaled vertically
+     */
+    public void drawCenteredString(CharSequence text, float x, float y, float width, float height, boolean scaleX, boolean scaleY) {
+        drawString(text, x + width / 2 - (float) getWidth(text, scaleX) / 2, y + height / 2 - (float) getHeight(text, scaleY) / 2, scaleX, scaleY);
+    }
 }

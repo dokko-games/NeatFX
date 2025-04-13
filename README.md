@@ -64,7 +64,7 @@ NeatFX.setDeveloperScreenSize(monitorWidth, monitorHeight);
 //NeatFX.setDesign(new DefaultDarkDesign());
 
 // Needed for NeatFX to work
-NeatFX.initialize();
+NeatFX.initialize(args);
 
 String windowTitle = ; // the window's title
 int windowWidth = ; // the window's width

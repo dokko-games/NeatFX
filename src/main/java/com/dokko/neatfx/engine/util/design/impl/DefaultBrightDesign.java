@@ -1,6 +1,7 @@
 package com.dokko.neatfx.engine.util.design.impl;
 
 import com.dokko.neatfx.core.window.element.impl.basic.Button;
+import com.dokko.neatfx.core.window.element.impl.basic.Dropdown;
 import com.dokko.neatfx.core.window.element.impl.basic.Panel;
 import com.dokko.neatfx.engine.render.Renderer;
 import com.dokko.neatfx.engine.util.design.NeatDesign;
@@ -20,14 +21,17 @@ public class DefaultBrightDesign extends NeatDesign {
             overridePanel(renderOverride);
         }else if(renderOverride.is(Button.class)){
             overrideButton(renderOverride);
+        }else if(renderOverride.is(Dropdown.class)){
+            bevelObject(renderOverride, 3);
         }
     }
 
     private void overridePanel(RenderOverride renderOverride) {
+        bevelObject(renderOverride, 6);
+    }
+    private void bevelObject(RenderOverride renderOverride, int borderSize) {
         int iw = (int) renderOverride.getElement().getAnchoredWidth();
         int ih = (int) renderOverride.getElement().getAnchoredHeight();
-
-        int borderSize = 6;
 
         float factor = (float) iw / (4 * borderSize);
         if(iw > 4 * borderSize) factor = 1;
