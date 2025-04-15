@@ -34,6 +34,8 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public class Window {
+    @Getter
+    private static Window activeWindow;
     public static ArrayList<Window> windowsToRemove;
     public static ArrayList<Window> registeredWindows;
     /**
@@ -220,6 +222,7 @@ public class Window {
      */
     public void renderLoop() {
         while ( !glfwWindowShouldClose(window) ) {
+            activeWindow = this;
             int width = getSize().width;
             int height = getSize().height;
             // Only update the projection if the size actually changed
@@ -312,5 +315,13 @@ public class Window {
         cleanUp();
         setVisible(false);
         updateWindows();
+    }
+
+    public float getWidth() {
+        return getSize().width;
+    }
+
+    public float getHeight() {
+        return getSize().height;
     }
 }

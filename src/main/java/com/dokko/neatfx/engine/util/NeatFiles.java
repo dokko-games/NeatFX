@@ -1,5 +1,7 @@
 package com.dokko.neatfx.engine.util;
 
+import com.dokko.neatfx.NeatLogger;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -32,7 +34,7 @@ public class NeatFiles {
                 @Override
                 public FileVisitResult visitFileFailed(Path file, IOException exc) {
 
-                    System.out.println("skipped: " + file + " (" + exc + ")");
+                    NeatLogger.info("skipped: %{0} (%{1})", file, exc);
                     // Skip folders that can't be traversed
                     return FileVisitResult.CONTINUE;
                 }
@@ -41,7 +43,7 @@ public class NeatFiles {
                 public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
 
                     if (exc != null)
-                        System.out.println("had trouble traversing: " + dir + " (" + exc + ")");
+                        NeatLogger.info("Had trouble traversing: %{0} (%{1})", dir, exc);
                     // Ignore errors traversing a folder
                     return FileVisitResult.CONTINUE;
                 }
@@ -67,5 +69,14 @@ public class NeatFiles {
         }
         state = state && f.delete();
         return state;
+    }
+
+    public static String read(File file) {
+        try {
+            return Files.readString(file.toPath());
+        } catch (Exception e){
+            NeatLogger.error("%{0}: %{1}", e.getClass().getSimpleName(), e.getMessage());
+            return "";
+        }
     }
 }

@@ -141,4 +141,9 @@ public class NeatFX {
     public static String getFilePath(String folder, String fileName, String extension) {
         return HOME_PATH+"/"+folder+"/"+fileName+"."+extension;
     }
+
+    public static <T> T ifNull(T current, T target) {
+        if(current == null)return target;
+        return current;
+    }
 }
